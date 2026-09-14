@@ -1,0 +1,3 @@
+interface:
+  display_name: "Inline Review"
+  short_description: "Address rev: review comments left in the code"

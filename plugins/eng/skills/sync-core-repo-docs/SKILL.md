@@ -1,39 +1,41 @@
 ---
 name: sync-core-repo-docs
 description: >-
-  Create or audit a repo's three core doc files — README.md, CLAUDE.md, and
-  REVIEW.md — in that dependency order. If a file is missing, generate it from
-  the actual codebase; if it exists, audit it against the current code and
-  apply targeted fixes after confirmation. README.md gets a developer from
-  clone to running the project; CLAUDE.md captures coding guidance for Claude
-  (delegating to /init or the claude-md-improver skill); REVIEW.md holds
-  reviewer-facing guidance for automated code review agents without
-  duplicating CLAUDE.md. Target files with --readme, --claude, and --review,
-  or run all three by default. Use whenever the user wants to set up,
-  bootstrap, scaffold, refresh, audit, update, or sync a repo's docs, or says
-  things like "create a README", "is my README still accurate", "write a
-  CLAUDE.md", "audit our docs", or "get this repo ready for contributors" —
-  even if they name only one of the three files. Prefer it over
-  claude-md-improver alone when README or REVIEW are also in scope.
+  Create or audit a repo's three core doc files — README.md, the agent
+  instructions file (AGENTS.md or CLAUDE.md), and REVIEW.md — in that
+  dependency order. If a file is missing, generate it from the codebase; if
+  it exists, audit it against the current code and apply targeted fixes
+  after confirmation. README.md gets a developer from clone to running the
+  project; AGENTS.md captures coding guidance for the agent (delegating to
+  /init or claude-md-improver); REVIEW.md holds guidance for code reviewers,
+  human or automated, without duplicating AGENTS.md. Target files with
+  --readme, --claude, and --review, or run all three. Use whenever the user
+  wants to set up, bootstrap, scaffold, refresh, audit, update, or sync a
+  repo's docs, or says things like "create a README", "is my README still
+  accurate", "write a CLAUDE.md", "write an AGENTS.md", "audit our docs", or
+  "get this repo ready for contributors" — even when only one file is named.
+  Prefer it over claude-md-improver when README or REVIEW are also in scope.
 ---
 
 # sync-core-repo-docs
 
-Create or audit the three documentation files that orient a developer (and Claude) to a repository:
+Create or audit the three documentation files that orient a developer (and a coding agent) to a repository:
 
 - **README.md** — for humans. Gets a developer from a fresh clone to running the project — a debug build for an app, install-and-use for a library or tool.
-- **CLAUDE.md** — for Claude. Coding guidance and project context used while *writing* code.
+- **AGENTS.md** — for the agent. Coding guidance and project context used while *writing* code.
 - **REVIEW.md** — for reviewers. Guidance used while *reviewing* code, by humans or automated code review agents.
+
+The instructions file is `AGENTS.md`, with `CLAUDE.md` as a symlink to it or a one-line `@AGENTS.md` import. A repo that has only a `CLAUDE.md` keeps it: audit and edit that file in place rather than introducing `AGENTS.md`. Everywhere below, "AGENTS.md" means whichever of the two the repo actually uses; `--claude` keeps its name and targets that file.
 
 For each file: if it's missing, create it from the actual codebase; if it exists, audit it for accuracy and propose targeted fixes. Creating a file is a normal write; changing an existing file is gated behind a confirmation checkpoint, because the user may have written something deliberately that looks wrong from the outside.
 
 ## Why this order
 
-Always process the files in this sequence — **README.md → CLAUDE.md → REVIEW.md** — because each settles facts the next one reuses:
+Always process the files in this sequence — **README.md → AGENTS.md → REVIEW.md** — because each settles facts the next one reuses:
 
 1. **README.md first** establishes the canonical one-line purpose, the build/test commands, and the architecture-in-brief — verified against the repo.
-2. **CLAUDE.md** can then reuse those verified commands and that structure instead of rediscovering them, and must not contradict the README.
-3. **REVIEW.md last** must avoid duplicating CLAUDE.md (see Step 3), so CLAUDE.md has to be settled before REVIEW.md is written.
+2. **AGENTS.md** can then reuse those verified commands and that structure instead of rediscovering them, and must not contradict the README.
+3. **REVIEW.md last** must avoid duplicating AGENTS.md (see Step 3), so AGENTS.md has to be settled before REVIEW.md is written.
 
 Finish one file — including its confirmation checkpoint — before starting the next. That way later files build on the *approved* version of earlier ones, not a draft.
 
@@ -42,7 +44,7 @@ Finish one file — including its confirmation checkpoint — before starting th
 Flags choose which files to process:
 
 - `--readme` → README.md only
-- `--claude` → CLAUDE.md only
+- `--claude` → AGENTS.md only
 - `--review` → REVIEW.md only
 
 Flags combine (`--readme --review` does both). **With no flags, process all three.** Whatever the subset, always run it in the canonical order above — flag order on the command line is irrelevant.
@@ -73,11 +75,11 @@ Read [references/readme-guidance.md](references/readme-guidance.md) first. The R
 
 **Audit:** Verify the existing README against the repo — do the documented prerequisites, setup steps, and commands still work and match reality, and do referenced docs/paths still exist? Surface anything stale, broken, or misleading that would leave a newcomer stuck. A missing optional section is not automatically a defect — judge gaps by whether they actually impair orientation. **Do not restructure or reformat an existing README** — match its existing structure and only fix accuracy. Larger formatting changes are out of scope unless the user asks.
 
-## Step 2 — CLAUDE.md
+## Step 2 — AGENTS.md
 
-CLAUDE.md is Claude's working context: build/test commands, architecture, conventions, and non-obvious gotchas — concise, project-specific, every line earning its place. Reuse the facts settled in Step 1 (purpose, commands, structure) rather than rediscovering them.
+AGENTS.md is the agent's working context: build/test commands, architecture, conventions, and non-obvious gotchas — concise, project-specific, every line earning its place. Reuse the facts settled in Step 1 (purpose, commands, structure) rather than rediscovering them.
 
-**Create (file absent):** Analyze the codebase and write a fresh CLAUDE.md — replicating what `/init` would do (this is descriptive, not an instruction to invoke the slash command). If the **claude-md-improver** skill (from the `claude-md-management` plugin) is installed, you may hand off to it after creation to refine the result. Keep it concise and actionable: commands that copy-paste cleanly, real paths, a brief architecture map, and the gotchas a new session would otherwise stumble on. Skip generic best-practice advice — it isn't project-specific and wastes the context window.
+**Create (file absent):** Analyze the codebase and write a fresh AGENTS.md — replicating what Claude Code's `/init` would do (this is descriptive, not an instruction to invoke the slash command). If the **claude-md-improver** skill (from the `claude-md-management` plugin) is installed, you may hand off to it after creation to refine the result. Keep it concise and actionable: commands that copy-paste cleanly, real paths, a brief architecture map, and the gotchas a new session would otherwise stumble on. Skip generic best-practice advice — it isn't project-specific and wastes the context window.
 
 **Audit (file present):** Do what the **claude-md-improver** skill does. If that skill is installed, invoke it. If it isn't, follow its workflow inline: score the file (commands, architecture clarity, non-obvious patterns, conciseness, currency, actionability), output a quality report, stop for confirmation, then apply targeted additions/fixes — flagging stale commands, deleted-file references, outdated tech versions, and undocumented gotchas. Don't pad the file with obvious or generic content.
 
@@ -87,17 +89,17 @@ Either way, this step keeps the skill's standard rhythm: for an existing file, r
 
 Read [references/review-guidance.md](references/review-guidance.md) first. REVIEW.md is reviewer-facing guidance for whoever reviews a change — a human or an automated code review agent: what to scrutinize in this codebase, security-sensitive surfaces, invariants that must hold, and known false-positive patterns reviewers should not flag.
 
-The defining constraint: **REVIEW.md must not duplicate CLAUDE.md.** They serve different moments — CLAUDE.md guides writing code, REVIEW.md guides reviewing it. Before writing or accepting any REVIEW.md content, check it against the CLAUDE.md settled in Step 2 and drop anything already covered there. If `--review` ran alone and Step 2 didn't execute this session, read the existing CLAUDE.md from disk to perform this check. The guidance file explains how to keep the two cleanly separated.
+The defining constraint: **REVIEW.md must not duplicate AGENTS.md.** They serve different moments — AGENTS.md guides writing code, REVIEW.md guides reviewing it. Before writing or accepting any REVIEW.md content, check it against the AGENTS.md settled in Step 2 and drop anything already covered there. If `--review` ran alone and Step 2 didn't execute this session, read the existing AGENTS.md from disk to perform this check. The guidance file explains how to keep the two cleanly separated.
 
 **Create:** Derive review priorities from the codebase — trust boundaries, auth/crypto/input-handling code, concurrency, money/units math, and other places where a subtle change does real damage — and write REVIEW.md per the recommended structure.
 
-**Audit:** Verify the existing REVIEW.md still matches the code (do the referenced risk areas and files still exist?) and, critically, check for overlap that has crept in against the current CLAUDE.md. Report → confirm → apply.
+**Audit:** Verify the existing REVIEW.md still matches the code (do the referenced risk areas and files still exist?) and, critically, check for overlap that has crept in against the current AGENTS.md. Report → confirm → apply.
 
 ## Things not to do
 
 - **Don't** edit an existing file without showing findings and getting confirmation first. Creating a missing file is fine to do directly; rewriting something the user wrote is not.
 - **Don't** restructure or reformat an existing README. Audit for accuracy and match the structure that's there.
-- **Don't** process the files out of order. README → CLAUDE → REVIEW exists so each builds on the approved version of the last.
-- **Don't** let REVIEW.md and CLAUDE.md say the same things. Overlap is the main way REVIEW.md goes wrong — when in doubt, leave authoring guidance in CLAUDE.md and keep REVIEW.md about what to scrutinize.
+- **Don't** process the files out of order. README → AGENTS → REVIEW exists so each builds on the approved version of the last.
+- **Don't** let REVIEW.md and AGENTS.md say the same things. Overlap is the main way REVIEW.md goes wrong — when in doubt, leave authoring guidance in AGENTS.md and keep REVIEW.md about what to scrutinize.
 - **Don't** invent commands, prerequisites, or architecture. Every concrete claim in any of these files must be verified against the repo — an unverified doc is worse than no doc.
-- **Don't** pad CLAUDE.md or REVIEW.md with generic best practices. Project-specific, non-obvious content only.
+- **Don't** pad AGENTS.md or REVIEW.md with generic best practices. Project-specific, non-obvious content only.

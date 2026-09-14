@@ -1,0 +1,12 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "eng",
+  "version": "0.30.0",
+  "description": "Eric's software engineering skills: planning workflows, code review, git history, .NET hygiene, system design, repo docs.",
+  "author": {
+    "name": "Eric Sondergard",
+    "url": "https://github.com/esond"
+  },
+  "repository": "https://github.com/esond/skills",
+  "license": "MIT"
+}

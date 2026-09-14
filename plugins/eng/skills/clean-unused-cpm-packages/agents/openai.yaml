@@ -1,0 +1,3 @@
+interface:
+  display_name: "Clean Unused CPM Packages"
+  short_description: "Remove unused PackageVersion entries from a .NET CPM repo"

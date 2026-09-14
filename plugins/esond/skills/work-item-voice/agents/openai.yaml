@@ -1,0 +1,3 @@
+interface:
+  display_name: "Work Item Voice"
+  short_description: "Write tracker issues in Eric's voice"

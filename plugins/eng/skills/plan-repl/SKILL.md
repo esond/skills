@@ -17,7 +17,7 @@ description: >-
 # Research → Plan → Implement
 
 A structured workflow that front-loads understanding before writing code. The core idea: never
-let Claude write code until a written plan has been reviewed and approved by the user.
+let the agent write code until a written plan has been reviewed and approved by the user.
 
 ## When to suggest this workflow
 

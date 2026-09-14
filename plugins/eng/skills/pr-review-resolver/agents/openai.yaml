@@ -1,0 +1,3 @@
+interface:
+  display_name: "PR Review Resolver"
+  short_description: "Fix, commit, reply to, and resolve GitHub PR review threads"

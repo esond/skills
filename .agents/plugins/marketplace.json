@@ -1,0 +1,63 @@
+{
+  "name": "esond",
+  "interface": {
+    "displayName": "Eric's skills"
+  },
+  "plugins": [
+    {
+      "name": "eng",
+      "source": {
+        "source": "local",
+        "path": "./plugins/eng"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Engineering"
+    },
+    {
+      "name": "comms",
+      "source": {
+        "source": "local",
+        "path": "./plugins/comms"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Communication"
+    },
+    {
+      "name": "behavior",
+      "source": {
+        "source": "local",
+        "path": "./plugins/behavior"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Behavior"
+    },
+    {
+      "name": "docs",
+      "source": {
+        "source": "local",
+        "path": "./plugins/docs"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Documentation"
+    },
+    {
+      "name": "esond",
+      "source": {
+        "source": "local",
+        "path": "./plugins/esond"
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Personal"
+    }
+  ]
+}

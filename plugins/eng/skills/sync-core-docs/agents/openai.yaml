@@ -1,0 +1,5 @@
+interface:
+  display_name: "Sync Core Docs"
+  short_description: "Create or audit README, AGENTS/CLAUDE, and REVIEW docs by flag"
+policy:
+  allow_implicit_invocation: false

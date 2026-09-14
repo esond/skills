@@ -1,48 +1,96 @@
-# claude-skills
+# skills
 
-Eric's personal [Claude Code](https://claude.ai/code) plugin marketplace. It
-publishes five plugins — `eng`, `comms`, `behavior`, `docs`, and `esond` — so
-each bucket can be toggled on and off independently, per project or context.
+Eric's personal skills for [Claude Code](https://claude.ai/code), Codex, and
+other coding agents. They ship as five independently installable plugins —
+`eng`, `comms`, `behavior`, `docs`, and `esond` — so each bucket can be
+toggled on and off independently, per project or context.
 
 | Plugin                        | Bucket                                                                              |
 | ----------------------------- | ----------------------------------------------------------------------------------- |
 | [`eng`](plugins/eng)          | Writing software: planning, review, git history, .NET hygiene, design, repo docs.   |
 | [`comms`](plugins/comms)      | External communications and human-facing writing.                                   |
-| [`behavior`](plugins/behavior) | Tweaks to Claude's behavior and Claude Code configuration.                          |
+| [`behavior`](plugins/behavior) | Tweaks to the agent's behavior: output shaping.                                    |
 | [`docs`](plugins/docs)        | Documentation: Diátaxis-guided writing and auditing of docs.                        |
 | [`esond`](plugins/esond)      | Personal to Eric: how he writes and works, not a general-purpose workflow.          |
 
 ## Installation
 
-Run these inside Claude Code:
+Two routes, depending on the agent. Pick one; installing through both leaves
+two copies of each skill.
 
-```text
-/plugin marketplace add esond/claude-skills
-/plugin install eng@claude-skills
-/plugin install comms@claude-skills
-/plugin install behavior@claude-skills
-/plugin install docs@claude-skills
-/plugin install esond@claude-skills
+<details>
+<summary><strong>Claude Code</strong></summary>
+
+From a terminal:
+
+```sh
+claude plugin marketplace add esond/skills
+claude plugin install eng@esond
+claude plugin install comms@esond
+claude plugin install behavior@esond
+claude plugin install docs@esond
+claude plugin install esond@esond
 ```
+
+The same commands work inside a Claude Code session as `/plugin marketplace add
+esond/skills`, `/plugin install eng@esond`, and so on.
 
 The first line registers this repo as a marketplace; the rest install plugins
 from it. Install only the ones you want.
 
+</details>
+
+<details>
+<summary><strong>Codex and other agents</strong></summary>
+
+Install every skill with the [skills.sh](https://skills.sh) CLI:
+
+```sh
+npx skills@latest add esond/skills
+```
+
+Or one bucket at a time:
+
+```sh
+npx skills@latest add esond/skills/plugins/eng
+npx skills@latest add esond/skills/plugins/comms
+npx skills@latest add esond/skills/plugins/behavior
+npx skills@latest add esond/skills/plugins/docs
+npx skills@latest add esond/skills/plugins/esond
+```
+
+Codex can also subscribe to the repo as a plugin marketplace with
+`codex plugin marketplace add esond/skills`, then install buckets from
+`/plugins` inside a Codex session.
+
+</details>
+
 ## Updating
 
+Claude Code:
+
 ```text
-/plugin marketplace update claude-skills
+/plugin marketplace update esond
+```
+
+skills.sh:
+
+```sh
+npx skills update
 ```
 
 ## Managing
 
-Each plugin toggles independently:
+Each plugin toggles independently in Claude Code:
 
 ```text
-/plugin disable eng@claude-skills
-/plugin enable eng@claude-skills
-/plugin uninstall eng@claude-skills
+/plugin disable eng@esond
+/plugin enable eng@esond
+/plugin uninstall eng@esond
 ```
+
+A skills.sh install is plain files under `.agents/skills/` (or
+`.claude/skills/`); delete a skill's directory to remove it.
 
 ## `eng` — engineering
 
@@ -53,27 +101,16 @@ Each plugin toggles independently:
 | [`clean-unused-cpm-packages`](plugins/eng/skills/clean-unused-cpm-packages/SKILL.md) | Removes unused `<PackageVersion>` entries from `Directory.Packages.props` files in a .NET CPM repo by scanning every `.csproj`/`.props`/`.targets` for `PackageReference` includes, then verifies via `dotnet restore`. |
 | [`inline-review`](plugins/eng/skills/inline-review/SKILL.md)                 | Finds and addresses inline code-review comments left in the code, marked with a `rev:` prefix (`// rev:`, `# rev:`, etc.) — treats each like a GitHub review comment, makes the change or answers the question, then removes the ones it handled. |
 | [`plan-repl`](plugins/eng/skills/plan-repl/SKILL.md)                         | Research → plan → annotate → implement workflow for non-trivial tasks. Writes research and a plan to `tasks/{name}/`, iterates on the plan via inline `> NOTE:` blockquotes until approved, then implements. |
-| [`plan-repl-auto`](plugins/eng/skills/plan-repl-auto/SKILL.md)               | Automated multi-model variant of `plan-repl`: a coordinator fans research out to parallel Sonnet subagents (via the Workflow tool), synthesizes `plan.md` on the session model, then a Fable arbiter grills the plan over up to three bounded rounds until it has no substantive objections — a cheap→mid→expensive cascade that replaces the human `> NOTE:` loop. Explicit-only via [`/eng:plan-repl-auto`](plugins/eng/commands/plan-repl-auto.md); `--implement` runs the whole cascade autonomously (no human checkpoints) and fans out Sonnet subagents to build the plan, `--arbiter` overrides the arbiter model. Synthesis runs on the session model (`/model opus`). |
 | [`plan-repl-resume`](plugins/eng/skills/plan-repl-resume/SKILL.md)           | Resumes an in-progress `plan-repl` task by reading its persisted files and cross-referencing with branch state to infer the current phase, then hands off to the right `plan-repl` phase to continue.        |
 | [`pr-review-resolver`](plugins/eng/skills/pr-review-resolver/SKILL.md)       | Fetches unresolved GitHub PR review threads, submitted review bodies, and general comments, fixes each in code, commits, replies with the commit hash, and resolves the threads.                             |
 | [`reorganize-branch-commits`](plugins/eng/skills/reorganize-branch-commits/SKILL.md) | Rewrites a non-default branch's history into clean, logical commits — proposes groupings from the actual diffs, gets approval, backs up, then rebuilds via `git reset` + re-commit (or scripted `git rebase -i`) with re-signing and hooks run.  |
 | [`righting-software-system-design`](plugins/eng/skills/righting-software-system-design/SKILL.md) | Heavyweight, opt-in, interview-driven system design session faithful to Juval Löwy's *Righting Software*. Walks framing → use cases → interrogative volatility analysis → iDesign component mapping (Manager/Engine/ResourceAccess/Utility) → call-chain validation, surfacing unknown-unknowns along the way and producing a written recommendation report. |
-| [`sign-unsigned-commits`](plugins/eng/skills/sign-unsigned-commits/SKILL.md) | Retroactively signs unsigned commits on the current branch that were authored by the current git user, via a targeted rebase that only amends matching commits.                                              |
-| [`sync-core-repo-docs`](plugins/eng/skills/sync-core-repo-docs/SKILL.md)     | Creates or audits a repo's three core doc files — README.md, CLAUDE.md, REVIEW.md — in that dependency order. Missing files are generated from the codebase; existing files are audited for accuracy and fixed after confirmation. README is checked for effective newcomer orientation, CLAUDE.md defers to `/init`/`claude-md-improver`, and REVIEW.md holds reviewer guidance kept distinct from CLAUDE.md. |
+| [`sync-core-docs`](plugins/eng/skills/sync-core-docs/SKILL.md)             | User-invoked router over `sync-core-repo-docs`: accepts `--readme`, `--claude`, `--review` (they combine; no flags runs all three) and hands off to that skill. Invoked by name (`/eng:sync-core-docs` in Claude Code), never auto-triggered.                                              |
+| [`sync-core-repo-docs`](plugins/eng/skills/sync-core-repo-docs/SKILL.md)     | Creates or audits a repo's three core doc files — README.md, AGENTS.md (or CLAUDE.md), REVIEW.md — in that dependency order. Missing files are generated from the codebase; existing files are audited for accuracy and fixed after confirmation. README is checked for effective newcomer orientation, AGENTS.md defers to `/init`/`claude-md-improver` where available, and REVIEW.md holds reviewer guidance kept distinct from AGENTS.md. |
 
 Each skill's `description` field enumerates the natural-language phrases that
-trigger it — you don't invoke them by name, Claude picks them up from how you
-phrase the request.
-
-### Commands
-
-Commands are invoked by name as `/eng:<command>`, with explicit flag
-arguments — a deterministic counterpart to skills' natural-language triggering.
-
-| Command                                                          | What it does                                                                                                                                                                          |
-| ----------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`/eng:sync-core-docs`](plugins/eng/commands/sync-core-docs.md)  | Thin wrapper over the [`sync-core-repo-docs`](plugins/eng/skills/sync-core-repo-docs/SKILL.md) skill. Accepts `--readme`, `--claude`, `--review` (they combine; no flags runs all three) and hands off to the skill. |
-| [`/eng:plan-repl-auto`](plugins/eng/commands/plan-repl-auto.md)  | Runs the [`plan-repl-auto`](plugins/eng/skills/plan-repl-auto/SKILL.md) multi-model plan cascade. Takes the planning task plus `--implement` and `--arbiter <model>`, and routes them to the skill. |
+trigger it — you don't invoke them by name, the agent picks them up from how
+you phrase the request.
 
 ## `comms` — communications
 
@@ -88,8 +125,7 @@ arguments — a deterministic counterpart to skills' natural-language triggering
 
 | Skill                                                                          | What it does                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`bro`](plugins/behavior/skills/bro/SKILL.md)                                  | Restates Claude's last message in plain, jargon-free language. Explicit-only (`disable-model-invocation: true`) — invoked by name, not auto-triggered.                                                      |
-| [`permission-consolidator`](plugins/behavior/skills/permission-consolidator/SKILL.md) | Reviews a Claude Code `settings.json` allow list, proposes consolidations for `Bash(...)` entries that share a command prefix, and flags one-off or stale entries for pruning.                               |
+| [`bro`](plugins/behavior/skills/bro/SKILL.md)                                  | Restates the agent's last message in plain, jargon-free language. Explicit-only (`disable-model-invocation: true`) — invoked by name, not auto-triggered.                                                      |
 
 ## `docs` — documentation
 
@@ -124,7 +160,9 @@ only where output should sound like him.
 ### Shared references
 
 Both voice skills read
-[`references/writing-for-people.md`](plugins/esond/references/writing-for-people.md)
-before they draft. It holds the rules that are not specific to either one — the
-writer pays the compression cost, and how to hand the draft back. Any voice
-skill added later reads the same file rather than restating the rules.
+[`writing-for-people.md`](plugins/esond/skills/conversational-voice/references/writing-for-people.md)
+before they draft. `conversational-voice` owns the file and `work-item-voice`
+reads it by relative path. It holds the rules that are not specific to either
+one — the writer pays the compression cost, and how to hand the draft back.
+Any voice skill added later reads the same file rather than restating the
+rules.

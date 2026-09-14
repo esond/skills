@@ -1,4 +1,5 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "esond",
   "version": "0.30.0",
   "description": "Eric's personal skills: how he writes and works, rather than a general-purpose workflow.",
@@ -7,8 +8,5 @@
     "url": "https://github.com/esond"
   },
   "repository": "https://github.com/esond/skills",
-  "skills": [
-    "./skills/conversational-voice",
-    "./skills/work-item-voice"
-  ]
+  "license": "MIT"
 }

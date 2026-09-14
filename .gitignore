@@ -6,6 +6,9 @@
 .claude/statsig/
 .claude/worktrees/
 
+# AI-assisted planning artifacts (plan.md, research.md, todo.md per task)
+tasks/
+
 # skill-creator transient eval workspaces (per-skill, sibling of the skill dir)
 plugins/*/skills/*-workspace/
 

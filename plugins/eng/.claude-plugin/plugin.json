@@ -1,22 +1,21 @@
 {
   "name": "eng",
-  "version": "0.29.0",
+  "version": "0.30.0",
   "description": "Eric's software engineering skills: planning workflows, code review, git history, .NET hygiene, system design, repo docs.",
   "author": {
     "name": "Eric Sondergard",
     "url": "https://github.com/esond"
   },
-  "repository": "https://github.com/esond/claude-skills",
+  "repository": "https://github.com/esond/skills",
   "skills": [
     "./skills/clean-unused-cpm-packages",
     "./skills/inline-review",
     "./skills/plan-repl",
-    "./skills/plan-repl-auto",
     "./skills/plan-repl-resume",
     "./skills/pr-review-resolver",
     "./skills/reorganize-branch-commits",
     "./skills/righting-software-system-design",
-    "./skills/sign-unsigned-commits",
+    "./skills/sync-core-docs",
     "./skills/sync-core-repo-docs"
   ]
 }
