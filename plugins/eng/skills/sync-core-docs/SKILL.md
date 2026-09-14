@@ -1,6 +1,6 @@
 ---
 name: sync-core-docs
-description:
+description: >-
   Create or audit a repo's README.md, AGENTS.md/CLAUDE.md, and REVIEW.md docs.
 disable-model-invocation: true
 argument-hint: "[--readme] [--claude] [--review]"
