@@ -1,0 +1,3 @@
+interface:
+  display_name: "Diátaxis"
+  short_description: "Classify a docs request and route to the matching type skill"

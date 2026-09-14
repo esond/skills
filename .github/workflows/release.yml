@@ -82,6 +82,74 @@ jobs:
           done
           echo "OK: all plugins at $GLOBAL_VERSION"
 
+      - name: Validate Codex manifests
+        run: |
+          echo "Validating .agents/plugins/marketplace.json..."
+          jq . .agents/plugins/marketplace.json > /dev/null
+          for manifest in plugins/*/plugin.json; do
+            echo "Validating $manifest..."
+            jq . "$manifest" > /dev/null
+          done
+
+          status=0
+          for dir in plugins/*/; do
+            plugin_root="${dir%/}"
+            NAME=$(basename "$plugin_root")
+            SOURCE=$(jq -r --arg n "$NAME" \
+              '.plugins[] | select(.name == $n) | .source.path' \
+              .agents/plugins/marketplace.json)
+            if [ -z "$SOURCE" ]; then
+              echo "ERROR: plugin '$NAME' not listed in .agents/plugins/marketplace.json"
+              status=1
+            elif [ "${SOURCE#./}" != "$plugin_root" ]; then
+              echo "ERROR: Codex marketplace entry '$NAME' points at '$SOURCE', expected './$plugin_root'"
+              status=1
+            fi
+
+            CLAUDE_MANIFEST="$plugin_root/.claude-plugin/plugin.json"
+            CODEX_MANIFEST="$plugin_root/plugin.json"
+            if [ ! -f "$CODEX_MANIFEST" ]; then
+              echo "ERROR: $CODEX_MANIFEST missing — Codex reads it; copy name and version from $CLAUDE_MANIFEST"
+              status=1
+              continue
+            fi
+            for field in name version; do
+              CLAUDE_VALUE=$(jq -r ".$field" "$CLAUDE_MANIFEST")
+              CODEX_VALUE=$(jq -r ".$field" "$CODEX_MANIFEST")
+              if [ "$CLAUDE_VALUE" != "$CODEX_VALUE" ]; then
+                echo "ERROR: $field mismatch for '$NAME'"
+                echo "  $CLAUDE_MANIFEST: $CLAUDE_VALUE"
+                echo "  $CODEX_MANIFEST: $CODEX_VALUE"
+                status=1
+              fi
+            done
+            echo "OK: $NAME listed for Codex, manifests agree"
+          done
+          exit $status
+
+      - name: Validate the CLAUDE.md symlink
+        run: |
+          # CLAUDE.md must stay a symlink to AGENTS.md. A checkout with
+          # core.symlinks=false, or a plain `ln -s` under Git Bash, replaces
+          # the link with a copy, and the two files then drift apart.
+          ENTRY=$(git ls-files -s CLAUDE.md)
+          MODE=$(printf '%s' "$ENTRY" | awk '{print $1}')
+          if [ "$MODE" != "120000" ]; then
+            echo "ERROR: CLAUDE.md is tracked with mode '${MODE:-none}', expected 120000 (symlink)"
+            echo "  recreate it with: MSYS=winsymlinks:nativestrict ln -sf AGENTS.md CLAUDE.md"
+            exit 1
+          fi
+          TARGET=$(git cat-file -p "$(printf '%s' "$ENTRY" | awk '{print $2}')")
+          if [ "$TARGET" != "AGENTS.md" ]; then
+            echo "ERROR: CLAUDE.md links to '$TARGET', expected AGENTS.md"
+            exit 1
+          fi
+          if [ ! -f AGENTS.md ]; then
+            echo "ERROR: AGENTS.md is missing"
+            exit 1
+          fi
+          echo "OK: CLAUDE.md -> AGENTS.md"
+
       - name: Validate skill references
         run: |
           echo "Checking skill folders..."
@@ -128,31 +196,71 @@ jobs:
             echo "OK: $file"
           done
 
+      - name: Validate skill metadata
+        run: |
+          # Every skill carries agents/openai.yaml for Codex. A user-invoked
+          # skill is marked twice — disable-model-invocation: true for Claude
+          # Code, policy.allow_implicit_invocation: false for Codex — and the
+          # two must agree, or the skill auto-fires on one agent and not the
+          # other.
+          status=0
+          for dir in plugins/*/skills/*/; do
+            skill_dir="${dir%/}"
+            skill="$skill_dir/SKILL.md"
+            yaml="$skill_dir/agents/openai.yaml"
+            if [ ! -f "$yaml" ]; then
+              echo "ERROR: $skill_dir has no agents/openai.yaml"
+              status=1
+              continue
+            fi
+            if ! grep -q '^  display_name:' "$yaml" || ! grep -q '^  short_description:' "$yaml"; then
+              echo "ERROR: $yaml needs interface.display_name and interface.short_description"
+              status=1
+            fi
+            frontmatter=$(awk '/^---$/{c++; next} c==1' "$skill")
+            if printf '%s\n' "$frontmatter" | grep -q '^disable-model-invocation: *true'; then
+              claude_user_invoked=yes
+            else
+              claude_user_invoked=no
+            fi
+            if grep -q '^  allow_implicit_invocation: *false' "$yaml"; then
+              codex_user_invoked=yes
+            else
+              codex_user_invoked=no
+            fi
+            if [ "$claude_user_invoked" != "$codex_user_invoked" ]; then
+              echo "ERROR: $skill_dir: disable-model-invocation: true ($claude_user_invoked) and allow_implicit_invocation: false ($codex_user_invoked) must be set together"
+              status=1
+            else
+              echo "OK: $skill_dir"
+            fi
+          done
+          exit $status
+
       - name: Validate shared reference files
         run: |
-          echo "Checking plugin-level shared references..."
+          echo "Checking skill references..."
 
-          # A `plugins/<plugin>/references/*.md` file is prose that two or more
-          # skills read at runtime. Nothing loads it for them — no manifest
-          # entry, no include mechanism — so each skill names the path in its
-          # body and Claude does the read. That leaves both halves of the link
-          # breakable with nothing to report it: a renamed file leaves the
-          # skills pointing at nothing, and a renamed or deleted skill can
-          # leave the file with no readers. Either way the shared rules stop
-          # reaching the skills that need them, silently, which is worse than
-          # the duplication a references directory exists to remove. So check
-          # the link from both ends.
+          # A `plugins/<plugin>/skills/<skill>/references/*.md` file is prose a
+          # skill reads at runtime. When two skills share it, one owns the file
+          # and the other names it as `../<owner>/references/<name>.md`.
+          # Nothing loads it for them — no manifest entry, no include
+          # mechanism — so each skill names the path in its body and the agent
+          # does the read. That leaves both halves of the link breakable with
+          # nothing to report it: a renamed file leaves the reader pointing at
+          # nothing, and a renamed or deleted reader can leave the file with no
+          # one naming it. Either way the shared rules stop reaching the skills
+          # that need them, silently. So check the link from both ends.
           #
           # This cannot catch a read that fails at runtime — that is why the
-          # skills themselves report a failed read (see CLAUDE.md, manifest
+          # skills themselves report a failed read (see AGENTS.md, manifest
           # layout). It catches the rename that causes one.
 
           status=0
 
-          # Forward — every reference path a SKILL.md names must resolve. The
-          # path is written relative to the SKILL.md, so resolve it from that
-          # file's own directory. The pattern allows any number of `../` so a
-          # wrong-depth path is caught here instead of passing unnoticed.
+          # Forward — every sibling reference path a SKILL.md names must
+          # resolve. The path is written relative to the SKILL.md, so resolve
+          # it from that file's own directory.
           while read -r file; do
             skill_dir=$(dirname "$file")
             while read -r rel; do
@@ -165,27 +273,31 @@ jobs:
                 echo "  fix the path, or restore the file the skill expects"
                 status=1
               fi
-            done < <(grep -o '\(\.\./\)\+references/[A-Za-z0-9._-]*\.md' "$file" | sort -u)
+            done < <(grep -o '\.\./[A-Za-z0-9._-]*/references/[A-Za-z0-9._-]*\.md' "$file" | sort -u)
           done < <(find plugins/*/skills -name "SKILL.md")
 
-          # Reverse — every shared reference must have at least one reader. The
-          # grep matches both forms a skill uses to name the file: the relative
-          # path and the plugin-root fragment.
-          for ref in plugins/*/references/*.md; do
+          # Reverse — every reference file must be named by its owner or by a
+          # sibling skill in the same plugin.
+          for ref in plugins/*/skills/*/references/*.md; do
             [ -f "$ref" ] || continue
-            plugin_root=$(dirname "$(dirname "$ref")")
+            plugin_skills=$(dirname "$(dirname "$(dirname "$ref")")")
             name=$(basename "$ref")
-            if [ ! -d "$plugin_root/skills" ]; then
-              echo "ERROR: $ref sits in a plugin with no skills directory"
-              status=1
-            elif grep -rqF "references/$name" "$plugin_root/skills"; then
-              echo "OK: $ref is read by a skill in $plugin_root"
+            if grep -rqF --include=SKILL.md "references/$name" "$plugin_skills"; then
+              echo "OK: $ref has a reader"
             else
-              echo "ERROR: no skill in $plugin_root reads $ref"
-              echo "  a shared reference with no readers is dead prose — name it"
-              echo "  from the skills that need it, or delete it"
+              echo "ERROR: no skill in $plugin_skills reads $ref"
+              echo "  a reference with no readers is dead prose — name it"
+              echo "  from the skill that needs it, or delete it"
               status=1
             fi
+          done
+
+          # A plugin-level references directory is unreachable from a skill
+          # installed on its own (skills.sh copies only the skill directory).
+          for dir in plugins/*/references; do
+            [ -d "$dir" ] || continue
+            echo "ERROR: $dir exists — move its files into the owning skill's references/"
+            status=1
           done
 
           exit $status
@@ -269,6 +381,20 @@ jobs:
 
           Install only the plugins you want — they toggle independently.
           FOOT
+
+          cat >> notes.md << SKILLS
+
+          For Codex and other agents, with [skills.sh](https://skills.sh):
+
+          \`\`\`sh
+          npx skills@latest add $GITHUB_REPOSITORY
+          # or one bucket at a time:
+          SKILLS
+
+          for manifest in plugins/*/.claude-plugin/plugin.json; do
+            echo "npx skills@latest add $GITHUB_REPOSITORY/$(dirname "$(dirname "$manifest")")" >> notes.md
+          done
+          echo '```' >> notes.md
 
           PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
           if [ -n "$PREV_TAG" ]; then

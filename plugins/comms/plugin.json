@@ -1,4 +1,5 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "comms",
   "version": "0.30.0",
   "description": "Eric's communication skills: transforms for messages and human-facing writing.",
@@ -7,8 +8,5 @@
     "url": "https://github.com/esond"
   },
   "repository": "https://github.com/esond/skills",
-  "skills": [
-    "./skills/de-slop",
-    "./skills/dehumanizer"
-  ]
+  "license": "MIT"
 }

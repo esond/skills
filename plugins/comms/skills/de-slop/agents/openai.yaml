@@ -1,0 +1,3 @@
+interface:
+  display_name: "De-slop"
+  short_description: "Strip AI tells from a draft while keeping its voice"

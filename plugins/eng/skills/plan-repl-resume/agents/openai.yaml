@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan REPL Resume"
+  short_description: "Resume an in-progress plan-repl task from its files"

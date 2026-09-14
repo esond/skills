@@ -1,0 +1,3 @@
+interface:
+  display_name: "Plan REPL"
+  short_description: "Research, plan, annotate, then implement"

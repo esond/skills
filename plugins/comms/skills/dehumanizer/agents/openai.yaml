@@ -1,0 +1,3 @@
+interface:
+  display_name: "Dehumanizer"
+  short_description: "Make a message look AI-generated, on an intensity dial"

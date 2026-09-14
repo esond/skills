@@ -58,16 +58,18 @@ review bodies in particular are easy to miss because they appear in neither the
 The payloads are large and parsing them is low-judgment: automated reviewers
 (Copilot, Claude, bots) bury a few actionable points under markdown chrome —
 collapsible sections, status tables, emoji headers, deploy-preview noise. So
-**delegate the fetch to a Sonnet subagent**: the raw output never lands in your
-context, and you get back a distilled worklist and spend your own context on the
-assessment and fixes (Steps 3+) that *do* need the session model's judgment.
+**delegate the fetch to a subagent if your harness has one**: the raw output
+never lands in your context, and you get back a distilled worklist and spend
+your own context on the assessment and fixes (Steps 3+) that *do* need the
+session model's judgment. Without subagents, run the three commands yourself
+and keep only the JSON described below.
 
-Spawn **one** subagent with the `Agent` tool (`subagent_type: general-purpose`,
-`model: sonnet`). Pin the model explicitly — with no `model`, the subagent
-inherits your session model rather than Sonnet. Its context is isolated (it sees
-nothing of this conversation), so the brief must carry the literal `OWNER`,
-`REPO`, and `PR_NUMBER` values from Step 1, the three commands below, and the
-rules that follow.
+Spawn **one** subagent on a cheap model (Claude Code: the `Agent` tool with
+`subagent_type: general-purpose` and `model: sonnet` — pin the model
+explicitly, since with no `model` the subagent inherits your session model).
+Its context is isolated (it sees nothing of this conversation), so the brief
+must carry the literal `OWNER`, `REPO`, and `PR_NUMBER` values from Step 1, the
+three commands below, and the rules that follow.
 
 > **Skip delegation for a tiny PR.** If the counts from Step 1 are small (say,
 > under ~5 threads, reviews, and comments combined), just run the three commands
@@ -200,7 +202,7 @@ placeholders; the field names and structure are what matter:
 }
 ```
 
-(The `Agent` tool has no schema enforcement, so that instruction plus the check
+(Subagent output has no schema enforcement, so that instruction plus the check
 below are what keep the output honest.) When it returns, sanity-check the shape:
 `threadId`s should start `PRRT_` and `firstCommentDatabaseId` should be an
 integer. If the subagent returned an error, prose instead of the structure, or

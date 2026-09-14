@@ -21,10 +21,9 @@ Anything you draft here goes out under the user's name. A coworker reads it as
 the user talking, not as a message the user commissioned. That is the whole
 standard: someone who knows them should read it and notice nothing.
 
-Before you draft, read `../../references/writing-for-people.md` — that is
-`references/writing-for-people.md` at the `esond` plugin root. It holds the
-rules this skill shares with `work-item-voice`. What follows here is what is
-specific to a conversation.
+Before you draft, read `references/writing-for-people.md`, beside this file.
+It holds the rules this skill shares with `work-item-voice`. What follows here
+is what is specific to a conversation.
 
 If that read fails, draft anyway and say so in one line. The rules below still
 apply, but the shared ones are missing, and the user needs to know that before

@@ -2,20 +2,24 @@
 
 Reviewer-facing notes for automated code review agents. This repo has no build
 or tests — review focuses on manifest integrity and the safety of what each
-skill instructs Claude to do, not runtime bugs.
+skill instructs the agent to do, not runtime bugs.
 
 ## Review priorities
 
-1. **Manifest integrity.** Any change touching a skill must keep three things in
-   agreement (CLAUDE.md gives the authoring rule — verify it actually held):
-   the owning plugin's `plugin.json` lists the skill dir; every plugin's
-   `plugin.json` version and `marketplace.json` entry carry one shared version
-   (a bump moves all of them, not just the plugin that changed); the
-   plugin's skills table in the README has a matching alphabetical row. Also
-   check the skill landed in the right plugin bucket (`eng`/`comms`/`behavior`
-   — CLAUDE.md "Choosing a bucket").
+1. **Manifest integrity.** Any change touching a skill must keep these things
+   in agreement (AGENTS.md gives the authoring rule — verify it actually
+   held): the owning plugin's `.claude-plugin/plugin.json` lists the skill
+   dir; every plugin's `.claude-plugin/plugin.json`, root `plugin.json`, and
+   `marketplace.json` entry carry one shared version (a bump moves all of
+   them, not just the plugin that changed); `.agents/plugins/marketplace.json`
+   lists every plugin; the plugin's skills table in the README has a matching
+   alphabetical row; the skill has an `agents/openai.yaml` whose `policy`
+   agrees with its `disable-model-invocation` frontmatter; and `CLAUDE.md` is
+   still a symlink to `AGENTS.md`. Also check the skill landed in the right
+   plugin bucket (`eng`/`comms`/`behavior`/`docs`/`esond` — AGENTS.md "Choosing
+   a bucket").
 2. **Description length.** Each SKILL.md `description` must stay under the
-   ~1024-char upload-validation ceiling (see CLAUDE.md "Authoring skills").
+   ~1024-char upload-validation ceiling (see AGENTS.md "Authoring skills").
    Over-length descriptions fail marketplace upload — check any added/edited
    one.
 3. **Trigger quality.** A new/changed `description` should enumerate concrete
@@ -33,7 +37,7 @@ skill instructs Claude to do, not runtime bugs.
 ## Known false positives — do not flag
 
 - Absence of build/test/CI — there is no runtime; by design.
-- Forward slashes, `/dev/null`, Unix shell syntax in skill bodies — CLAUDE.md
+- Forward slashes, `/dev/null`, Unix shell syntax in skill bodies — AGENTS.md
   mandates bash for skill commands; intentional, not a Windows bug.
 - Verbose, repetitive skill `description` fields — verbosity is a deliberate
   triggering strategy.

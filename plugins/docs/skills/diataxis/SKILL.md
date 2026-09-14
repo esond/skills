@@ -64,7 +64,7 @@ A request that spans types is normal, not a failure: "document the deploy pipeli
 
 ### Step 3 — Hand off
 
-Invoke the matching type skill(s) via the Skill tool — `docs:diataxis-tutorial`, `docs:diataxis-how-to`, `docs:diataxis-reference`, `docs:diataxis-explanation` — passing along what Steps 1–2 established: the reader, the classification, the target file(s), and the neighbors to link. For multi-type work, handle one piece at a time to completion rather than drafting everything at once; each finished piece sharpens the next.
+Invoke the matching type skill(s) via the Skill tool — `diataxis-tutorial`, `diataxis-how-to`, `diataxis-reference`, `diataxis-explanation` — passing along what Steps 1–2 established: the reader, the classification, the target file(s), and the neighbors to link. For multi-type work, handle one piece at a time to completion rather than drafting everything at once; each finished piece sharpens the next.
 
 ## Audit mode
 

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Reorganize Branch Commits"
+  short_description: "Rewrite a branch's history into clean, logical commits"

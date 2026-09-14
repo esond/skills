@@ -49,7 +49,7 @@ means one of:
 - The user referenced the source material (*Righting Software*, Juval
   Löwy, iDesign, "The Method", volatility-based decomposition) AND
   asked to go through it
-- The user accepted a prior suggestion from Claude to run this
+- The user accepted a prior suggestion from the agent to run this
   workflow
 
 **It is appropriate to *suggest* this skill** when the user's question
@@ -133,9 +133,10 @@ each turn:
   exactly is volatile, why is it volatile, what's the likelihood and
   effect of change, and could it be a sub-attribute of something else?
   Reject candidates that are merely variable or speculative.
-- **Use `AskUserQuestion` at branches.** When the user faces a discrete
-  choice (new vs. refactor, encapsulate vs. fold-in, which Manager owns
-  X), present 2–4 options with brief reasoning rather than open prose.
+- **Ask with a structured choice at branches.** When the user faces a
+  discrete choice (new vs. refactor, encapsulate vs. fold-in, which Manager
+  owns X), present 2–4 options with brief reasoning rather than open prose
+  (Claude Code: `AskUserQuestion`; otherwise a numbered list).
 - **Stop and check in between phases.** Never proceed to the next phase
   without an explicit "looks good, continue" from the user.
 
@@ -149,7 +150,7 @@ Before anything else, suggest a short kebab-case name for the system
 being decomposed. *"I'm trying to figure out how to structure our order
 pipeline"* → suggest `order-pipeline`. Let the user override.
 
-Then ask, via `AskUserQuestion`:
+Then ask, as a structured choice:
 
 > **Is this a new system or a refactor of an existing one?**
 >
@@ -407,10 +408,10 @@ to *discover* volatility the user hadn't named:
 6. **Anti-design contrast**: walk through a deliberately-bad
    functional or domain decomposition; the points of pain it exposes
    are often volatility you'd otherwise miss.
-7. **Claude proposes**: based on the domain (payments, marketplace,
+7. **The agent proposes**: based on the domain (payments, marketplace,
    logistics, SaaS, etc.), suggest 3–5 common volatilities for that
-   class of system the user hasn't mentioned. Use `AskUserQuestion` to
-   present candidates if helpful.
+   class of system the user hasn't mentioned. Present the candidates as
+   a structured choice if helpful.
 
 ### Step 2d: Peel solutions-masquerading-as-requirements
 
@@ -1041,7 +1042,7 @@ can be modified after the fact**. The SVG fallback produces the same
 visual output but is awkward to edit later (hand-tweaking SVG paths
 vs. editing readable D2 source).
 
-Use `AskUserQuestion` to offer two paths:
+Offer two paths as a structured choice:
 
 > `d2` isn't on PATH, so the final diagrams can't be emitted in their
 > preferred (editable) form. Two options:

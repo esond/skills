@@ -23,10 +23,10 @@ reader pays for what the writer did not bother to cut, and every reader loses
 options the writer closed off by guessing at the solution. Those two costs are
 what this skill exists to keep down.
 
-Before you draft, read `../../references/writing-for-people.md` — that is
-`references/writing-for-people.md` at the `esond` plugin root. It holds the
-rules this skill shares with `conversational-voice`. What follows here is what
-is specific to an issue.
+Before you draft, read
+`../conversational-voice/references/writing-for-people.md`, the file
+`conversational-voice` owns. It holds the rules this skill shares with
+`conversational-voice`. What follows here is what is specific to an issue.
 
 If that read fails, draft anyway and say so in one line. The rules below still
 apply, but the shared ones are missing, and the user needs to know that before
