@@ -22,13 +22,13 @@ Rewrite the commits on a feature branch into a clean, logical history. Every com
 
 ## Step 1 — check the branch
 
+The repo default is `git symbolic-ref refs/remotes/origin/HEAD --short | sed 's@^origin/@@'`. The base is `git merge-base HEAD origin/<default>`, unless the user names another (a branch stacked on another feature branch).
+
 Stop and tell the user if any of these hold:
 
-- HEAD is detached, or the branch is `main`, `master`, `trunk`, `develop`, `production`, `release`, or the repo default (`git symbolic-ref refs/remotes/origin/HEAD --short`).
+- HEAD is detached, or the branch is `main`, `master`, `trunk`, `develop`, `production`, `release`, or the repo default.
 - `git status` shows uncommitted changes or an in-progress rebase, merge, or cherry-pick. A reset would fold uncommitted edits into the new commits.
-- The branch has fewer than two commits past its base.
-
-The base is `git merge-base HEAD origin/<default>`, unless the user names another (a branch stacked on another feature branch).
+- The branch has fewer than two commits past the base.
 
 ## Step 2 — propose a history
 
@@ -56,6 +56,6 @@ Use `git rebase -i <base>` instead when the existing commit boundaries already m
 
 `git diff <backup> HEAD` must be empty. If it isn't, show the user the difference: a missed hunk goes into a commit, while hook output (formatters, codegen) needs the user's OK. Then show `git log --oneline <base>..HEAD`.
 
-Ask whether to push, and push only on a yes: `git push --force-with-lease` if the branch has an upstream, otherwise `git push -u origin <branch>`. Never use plain `--force`.
+Once the diff is empty or the user has accepted what's left, ask whether to push, and push only on a yes: `git push --force-with-lease` if the branch has an upstream, otherwise `git push -u origin <branch>`. Never use plain `--force`.
 
 After the push succeeds, offer to delete the backup with `git branch -D <backup>`, and keep it if the user declines.
