@@ -1,6 +1,6 @@
 {
   "name": "behavior",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "Eric's agent-behavior tweaks: output shaping.",
   "author": {
     "name": "Eric Sondergard",
@@ -8,6 +8,7 @@
   },
   "repository": "https://github.com/esond/skills",
   "skills": [
-    "./skills/bro"
+    "./skills/bro",
+    "./claude-skills/durable-compact"
   ]
 }
