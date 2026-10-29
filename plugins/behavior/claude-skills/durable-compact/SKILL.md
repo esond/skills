@@ -41,7 +41,6 @@ In the same `AskUserQuestion` call, check for the compact hook. It is already ac
 
 ```json
 {
-  "matcher": "compact",
   "hooks": [{ "type": "command", "command": "sh \"<base dir>/scripts/load-handoff.sh\"", "timeout": 5 }]
 }
 ```

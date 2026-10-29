@@ -132,7 +132,7 @@ you phrase the request.
 
 | Hook | What it does |
 | ---- | ------------ |
-| `SessionStart` (`compact`) | Runs [`load-handoff.sh`](plugins/behavior/claude-skills/durable-compact/scripts/load-handoff.sh), which loads the handoff `durable-compact` just wrote into the compacted context. It acts only in the session that ran the skill, and only within 30 minutes of it; other sessions and later compactions are untouched. A copy of the skill used outside the plugin offers to add the same hook to `settings.json`. |
+| `SessionStart` | Runs [`load-handoff.sh`](plugins/behavior/claude-skills/durable-compact/scripts/load-handoff.sh), which loads the handoff `durable-compact` just wrote into the compacted context. It loads only after `/compact`, only in the session that ran the skill, and only within 30 minutes of it; other sessions and later compactions are untouched. On every session start it also deletes pending pointers older than 30 minutes, such as one left behind by `/clear`. A copy of the skill used outside the plugin offers to add the same hook to `settings.json`. |
 
 ## `docs` — documentation
 
