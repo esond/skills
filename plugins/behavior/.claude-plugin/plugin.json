@@ -1,6 +1,6 @@
 {
   "name": "behavior",
-  "version": "0.32.0",
+  "version": "0.33.0",
   "description": "Eric's agent-behavior tweaks: output shaping.",
   "author": {
     "name": "Eric Sondergard",
