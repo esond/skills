@@ -126,6 +126,13 @@ you phrase the request.
 | Skill                                                                          | What it does                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`bro`](plugins/behavior/skills/bro/SKILL.md)                                  | Restates the agent's last message in plain, jargon-free language. Explicit-only (`disable-model-invocation: true`) — invoked by name, not auto-triggered.                                                      |
+| [`durable-compact`](plugins/behavior/claude-skills/durable-compact/SKILL.md)          | Before `/compact`, writes the session's goal, state, decisions, corrections, hard-won facts, and next step to a handoff file under `~/.claude/handoffs/`, asks one question about borderline items, then prints a focused `/compact` line and a resume prompt. Explicit-only (`disable-model-invocation: true`). Claude Code only: not listed for skills.sh or Codex. |
+
+### Hooks
+
+| Hook | What it does |
+| ---- | ------------ |
+| `SessionStart` (`compact`) | Runs [`load-handoff.sh`](plugins/behavior/claude-skills/durable-compact/scripts/load-handoff.sh), which loads the handoff `durable-compact` just wrote into the compacted context. It acts only in the session that ran the skill, and only within 30 minutes of it; other sessions and later compactions are untouched. A copy of the skill used outside the plugin offers to add the same hook to `settings.json`. |
 
 ## `docs` — documentation
 

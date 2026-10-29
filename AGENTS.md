@@ -91,7 +91,10 @@ loading. Each consumer reads a different subset.
   rather than by the user.
 - `plugins/<plugin>/hooks/hooks.json` — event handlers, auto-discovered at the
   plugin root, so `plugin.json` does not list them. Scripts live beside it in
-  `hooks/` and are invoked via `${CLAUDE_PLUGIN_ROOT}`. A hook fires for every
+  `hooks/` and are invoked via `${CLAUDE_PLUGIN_ROOT}`, except a script a skill
+  also offers to install into `settings.json`: that lives in the skill's
+  `scripts/`, so a copy of the skill directory carries it (`durable-compact`
+  is the example). A hook fires for every
   session the plugin is enabled in, so it must exit 0 on all failure paths
   rather than block startup. Write them in POSIX `sh` (Git Bash runs them on
   Windows); `.gitattributes` pins `*.sh` to LF, since CRLF survives Git Bash
@@ -116,6 +119,15 @@ loading. Each consumer reads a different subset.
   `repository` as the plugin's `.claude-plugin/plugin.json`; CI checks that
   `name` and `version` are equal. It lists no skills: Codex discovers them
   from `skills/`.
+
+A skill that only works in Claude Code (it needs `/compact`, `AskUserQuestion`,
+or Claude Code hooks) lives in `plugins/<plugin>/claude-skills/<skill-name>/`
+instead of `skills/`, which Codex walks, and sets `metadata.internal: true` in
+its frontmatter, which hides it from skills.sh (skills.sh also reads the
+`skills` array, so the directory alone does not). It is listed in the plugin's
+`.claude-plugin/plugin.json` `skills` array like any other skill and has no
+`agents/openai.yaml`. CI's frontmatter
+check walks only `skills/`, so check its `name` and `description` by hand.
 
 When adding or removing a skill, update the owning plugin's
 `.claude-plugin/plugin.json` (`skills` array), give a new skill its
