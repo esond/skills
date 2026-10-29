@@ -1,5 +1,6 @@
 #!/bin/sh
-# SessionStart hook: prints the handoff /durable-compact wrote just before this compaction.
+# SessionStart hook: sweeps stale handoff pointers, then, after /compact, prints the handoff /durable-compact
+# wrote just before it.
 # Claude Code adds a SessionStart hook's stdout to the post-compaction context.
 input=$(cat)
 pending_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/handoffs/.pending"
