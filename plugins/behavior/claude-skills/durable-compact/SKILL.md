@@ -37,11 +37,10 @@ Done when a reader with only this file and the repo could take the next step wit
 
 While drafting, note the borderline items: things you weren't sure deserved a place, or facts you inferred rather than saw. With two or more, ask one `AskUserQuestion` (multiSelect): "Which of these should the handoff keep?" with up to four of them as options. With fewer, ask a single-select "Anything else the handoff should keep?" with "No, it's complete" and, if there is one, "Keep <the borderline item>" as options. Either way the built-in "Other" box is where the user adds what you missed. Apply the answers to the file.
 
-In the same `AskUserQuestion` call, check for the compact hook. It is already active when this skill came from the `behavior` plugin, which ships it: `<base dir>/../../hooks/hooks.json` exists and names `load-handoff.sh`. Otherwise search the user settings file (`settings.json` in the Claude config dir) and the project's `.claude/settings.json` and `.claude/settings.local.json` for `load-handoff.sh`. If it's in none of them, add a second question offering to install it: it loads the handoff into context automatically after every compaction that follows this skill, so the resume prompt becomes unnecessary. On yes, add this entry to the `hooks.SessionStart` array, keeping everything else in the file intact, with the script's absolute path from this skill's base directory:
+In the same `AskUserQuestion` call, check for the compact hook. It is already active when this skill came from the `behavior` plugin, which ships it: `<base dir>/../../hooks/hooks.json` exists and names `load-handoff.sh`. Otherwise search the user settings file (`settings.json` in the Claude config dir) and the project's `.claude/settings.json` and `.claude/settings.local.json` for `load-handoff.sh`. If the entry that names it has `"matcher": "compact"`, remove that matcher so the stale-pointer sweep runs on every session start. If it's in none of them, add a second question offering to install it: it loads the handoff into context automatically after every compaction that follows this skill, so the resume prompt becomes unnecessary. On yes, add this entry to the `hooks.SessionStart` array, keeping everything else in the file intact, with the script's absolute path from this skill's base directory:
 
 ```json
 {
-  "matcher": "compact",
   "hooks": [{ "type": "command", "command": "sh \"<base dir>/scripts/load-handoff.sh\"", "timeout": 5 }]
 }
 ```
