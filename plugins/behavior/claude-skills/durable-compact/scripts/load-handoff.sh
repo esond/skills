@@ -1,12 +1,12 @@
 #!/bin/sh
-# SessionStart hook: sweeps stale handoff pointers, then, after /compact, prints the handoff /durable-compact
-# wrote just before it.
+# SessionStart hook (matcher "compact"): sweeps stale handoff pointers, then prints the handoff /durable-compact
+# wrote just before this compaction.
 # Claude Code adds a SessionStart hook's stdout to the post-compaction context.
 input=$(cat)
 pending_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/handoffs/.pending"
 
 # A pointer older than 30 minutes is from a handoff the user worked past, or left behind by /clear or a closed
-# session, which never compact into it. Sweeping on every session start keeps those from piling up.
+# session, which never compact into it. The skill sweeps them too, each time it writes a new pointer.
 [ -d "$pending_dir" ] && find "$pending_dir" -type f -mmin +30 -exec rm -f {} +
 
 source=$(printf '%s' "$input" | sed -n 's/.*"source"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | head -n 1)

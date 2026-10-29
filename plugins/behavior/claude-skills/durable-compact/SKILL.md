@@ -16,7 +16,7 @@ The whole run happens in context that compaction is about to fold away, so keep 
 
 Write it from what is already in your context. You hold the full session, so you write it yourself; a fresh subagent sees none of the conversation.
 
-Path: `handoffs/<project>/<YYYY-MM-DD-HHmm>-<topic-slug>.md` under the Claude config dir (`${CLAUDE_CONFIG_DIR:-$HOME/.claude}`), resolved to an absolute path. `<project>` is the basename of the git root of the session's primary working directory, or of that directory outside a repo. Get the timestamp from the shell rather than guessing it. Then write `handoffs/.pending/<session id>` holding only the handoff's absolute path, where the session id is `$CLAUDE_CODE_SESSION_ID` read from the shell; the compact hook loads the handoff for that session only.
+Path: `handoffs/<project>/<YYYY-MM-DD-HHmm>-<topic-slug>.md` under the Claude config dir (`${CLAUDE_CONFIG_DIR:-$HOME/.claude}`), resolved to an absolute path. `<project>` is the basename of the git root of the session's primary working directory, or of that directory outside a repo. Get the timestamp from the shell rather than guessing it. Then write `handoffs/.pending/<session id>` holding only the handoff's absolute path, where the session id is `$CLAUDE_CODE_SESSION_ID` read from the shell; the compact hook loads the handoff for that session only. In the same shell call, delete files in `handoffs/.pending` older than 30 minutes: pointers left by `/clear` or a closed session, which no compaction will consume.
 
 Fill these sections, omitting any that would be empty:
 
@@ -37,10 +37,11 @@ Done when a reader with only this file and the repo could take the next step wit
 
 While drafting, note the borderline items: things you weren't sure deserved a place, or facts you inferred rather than saw. With two or more, ask one `AskUserQuestion` (multiSelect): "Which of these should the handoff keep?" with up to four of them as options. With fewer, ask a single-select "Anything else the handoff should keep?" with "No, it's complete" and, if there is one, "Keep <the borderline item>" as options. Either way the built-in "Other" box is where the user adds what you missed. Apply the answers to the file.
 
-In the same `AskUserQuestion` call, check for the compact hook. It is already active when this skill came from the `behavior` plugin, which ships it: `<base dir>/../../hooks/hooks.json` exists and names `load-handoff.sh`. Otherwise search the user settings file (`settings.json` in the Claude config dir) and the project's `.claude/settings.json` and `.claude/settings.local.json` for `load-handoff.sh`. If the entry that names it has `"matcher": "compact"`, remove that matcher so the stale-pointer sweep runs on every session start. If it's in none of them, add a second question offering to install it: it loads the handoff into context automatically after every compaction that follows this skill, so the resume prompt becomes unnecessary. On yes, add this entry to the `hooks.SessionStart` array, keeping everything else in the file intact, with the script's absolute path from this skill's base directory:
+In the same `AskUserQuestion` call, check for the compact hook. It is already active when this skill came from the `behavior` plugin, which ships it: `<base dir>/../../hooks/hooks.json` exists and names `load-handoff.sh`. Otherwise search the user settings file (`settings.json` in the Claude config dir) and the project's `.claude/settings.json` and `.claude/settings.local.json` for `load-handoff.sh`. If the entry that names it has no `matcher`, set it to `"compact"` so the hook runs only after compaction. If it's in none of them, add a second question offering to install it: it loads the handoff into context automatically after every compaction that follows this skill, so the resume prompt becomes unnecessary. On yes, add this entry to the `hooks.SessionStart` array, keeping everything else in the file intact, with the script's absolute path from this skill's base directory:
 
 ```json
 {
+  "matcher": "compact",
   "hooks": [{ "type": "command", "command": "sh \"<base dir>/scripts/load-handoff.sh\"", "timeout": 5 }]
 }
 ```
