@@ -161,10 +161,15 @@ about keeping the read path simple."
 **DM, unpacking several questions (lowercase and shorthand are the venue):**
 
 > \> webhook still slow?
+>
 > no, we stopped waiting on it. ~40s now
+>
 > \> field count
+>
 > not really, most of those fields are ours, not the vendor's
+>
 > \> prod
+>
 > today
 
 Not: "Great questions! Here's a quick rundown:" followed by a bold heading for
