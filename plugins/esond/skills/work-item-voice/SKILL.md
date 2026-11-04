@@ -176,14 +176,17 @@ compliance is not the goal. A term from the problem domain stays as it is, even
 when a plainer word exists, because renaming the domain to sound simpler makes
 the issue wrong.
 
-Some of the AI tells catalogued in `conversational-voice` carry over. An issue
-that opens with a summary of itself, lists exactly three considerations, or ends
-on a tidy restatement reads as generated, and readers discount it.
-
 ## Formatting
 
-The rule against mechanical structure in `conversational-voice` does not carry
-over. That one is calibrated for Slack, where most messages are one paragraph.
+Some of the writing habits in `conversational-voice` carry over: open on the
+content, list as many considerations as there are, and end where the content
+ends. For an issue, the answer that leads is the desired behavior or what
+happened, since the title already carries the summary. The recap line that
+`conversational-voice` gives long messages does not carry over, because an
+issue's last section is the background addendum when it has one.
+
+The paragraph-first shape in `conversational-voice` does not carry over either.
+That one is calibrated for Slack, where most messages are one paragraph.
 A tracker is the opposite. People scan issues, come back to them weeks later,
 and read them next to twenty others.
 
