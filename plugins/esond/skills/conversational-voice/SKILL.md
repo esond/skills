@@ -9,8 +9,9 @@ description: >-
   to this", "how should I word this", "tell the team", "ask them about X", "send
   a note to", or just paste a thread and ask what to say back. Load it too when
   tightening, shortening, or sanity-checking a message they already wrote, and
-  when a message is one step of a larger task. The register is direct, casual,
-  and collegial, with the answer up front for a reader who skims. Not for
+  when a message is one step of a larger task. The register is direct and
+  informal, the way they'd talk to a friend or acquaintance, with the answer up
+  front for a reader who skims. Not for
   something the user authors rather than sends — an issue body, a PR
   description, a commit message — even though a person reads those too.
 ---
@@ -48,8 +49,8 @@ house voice on round two is the most common way this fails.
 
 ## The register
 
-Direct, casual, collegial. Draft it how the user would say it to a coworker they
-talk to every day.
+Direct and informal. Draft it how the user would say it to a friend or an
+acquaintance, or a coworker they talk to every day.
 
 Casual sets the vocabulary, not the care. Contractions, plain words, the
 occasional sentence fragment. No slang for its own sake, and no performance of
@@ -59,9 +60,9 @@ Adjust for distance, not for the rules. A note to an external vendor drops the
 in-jokes and keeps a greeting. It stays just as direct, and every habit below
 still holds.
 
-## Collegial
+## Talk to the person
 
-The message is the user talking to a colleague. Reply to the person, not to
+The message is the user talking to someone they know. Reply to the person, not to
 their message as a document. Answer what they asked, respond to the one point
 that needs it, and let the rest go. Lean on context you both already have
 instead of re-explaining it. Match their length and tone: a two-line question
@@ -87,7 +88,9 @@ recap of substance, not a kicker.
 
 When their message has several things that each need unpacking, quote their own
 words with `>` and answer each one briefly underneath. Otherwise write
-paragraphs, and use a list only when the content is a list. Bold headers belong
+paragraphs. Bullets are for content the reader will scan or work through, like
+a set of changed endpoints. Questions and concerns stay in sentences, the way
+they'd be said. Bold headers belong
 to documents. Emoji section markers belong nowhere.
 
 ## The test for what survives
@@ -100,11 +103,14 @@ name, a reason, or the thing that changed, it goes in.
 
 Each of these is a habit of the user's, and the draft shares it.
 
-**Venue sets the polish.** In a DM, lowercase starts, shorthand (IMO, IIRC,
-atm, lol), and a quick reaction as the opener ("Hm. That's a new one.", "yeah
-you were") are normal. In a channel, sentences get their capitals and the
-shorthand thins out. In a DM with someone they trust, the user says what they
-actually think, frustration included.
+**Polish follows length.** A quick one-liner in a DM can start lowercase, use
+shorthand (IMO, IIRC, atm, lol), or open on a reaction ("Hm. That's a new
+one.", "yeah you were"). Once a message explains something over a few
+sentences, it gets normal capitals, in a DM or a channel. In a DM with someone
+they trust, the user says what they actually think, frustration included.
+
+**Said out loud.** Write each sentence the way the user would say it: "that's by
+design", where a clipped "by design." reads like a status field.
 
 **Reasons inline.** The why rides in the same sentence, usually on "because":
 "Seems transient, because there's no egress quota anywhere in the settings."
@@ -118,6 +124,11 @@ are true, say two. A list of three appears only when there are actually three.
 name and a comma, used only when the distance calls for one. Pleasantries,
 praise for the question, and apologies for following up all come out.
 Politeness lives in how the ask is phrased, not in a runway before it.
+
+**Asks as questions.** When the message wants something, it asks for it with a
+question mark: "Is there an existing doc for this policy I can check?" A
+conditional like "if there's a doc, that'd answer most of it" leaves the reader
+to work out that it was an ask.
 
 **Everyday words.** The word a coworker says out loud: use, read, solid, ask,
 talk to, time, where a press release would say leverage, reach out, align on,
