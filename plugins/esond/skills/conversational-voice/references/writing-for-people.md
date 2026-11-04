@@ -20,6 +20,13 @@ Trim the framing. Keep the facts.
 Which facts survive depends on who is reading, so each skill names its own test.
 Apply the test from the skill you are in.
 
+## Lead with the answer
+
+Most readers take in the first few sentences and the last few, then move on.
+Write for that reader. The answer, the ask, or the news goes first, so someone
+who stops after one line still has it. Detail follows for whoever needs it.
+What belongs at the bottom differs by artifact, so each skill says.
+
 ## Delivering the draft
 
 Lead with the artifact itself, in a block that copies cleanly into wherever it
