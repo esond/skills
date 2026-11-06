@@ -1,6 +1,6 @@
 {
   "name": "comms",
-  "version": "0.35.0",
+  "version": "0.36.0",
   "description": "Eric's communication skills: transforms for messages and human-facing writing.",
   "author": {
     "name": "Eric Sondergard",
@@ -8,7 +8,6 @@
   },
   "repository": "https://github.com/esond/skills",
   "skills": [
-    "./skills/de-slop",
-    "./skills/dehumanizer"
+    "./skills/de-slop"
   ]
 }

@@ -7,7 +7,7 @@ toggled on and off independently, per project or context.
 
 | Plugin                        | Bucket                                                                              |
 | ----------------------------- | ----------------------------------------------------------------------------------- |
-| [`eng`](plugins/eng)          | Writing software: planning, review, git history, .NET hygiene, design, repo docs.   |
+| [`eng`](plugins/eng)          | Writing software: review, git history, .NET hygiene, design, repo docs.             |
 | [`comms`](plugins/comms)      | External communications and human-facing writing.                                   |
 | [`behavior`](plugins/behavior) | Tweaks to the agent's behavior: output shaping.                                    |
 | [`docs`](plugins/docs)        | Documentation: Diátaxis-guided writing and auditing of docs.                        |
@@ -100,8 +100,6 @@ A skills.sh install is plain files under `.agents/skills/` (or
 | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [`clean-unused-cpm-packages`](plugins/eng/skills/clean-unused-cpm-packages/SKILL.md) | Removes unused `<PackageVersion>` entries from `Directory.Packages.props` files in a .NET CPM repo by scanning every `.csproj`/`.props`/`.targets` for `PackageReference` includes, then verifies via `dotnet restore`. |
 | [`inline-review`](plugins/eng/skills/inline-review/SKILL.md)                 | Finds and addresses inline code-review comments left in the code, marked with a `rev:` prefix (`// rev:`, `# rev:`, etc.) — treats each like a GitHub review comment, makes the change or answers the question, then removes the ones it handled. |
-| [`plan-repl`](plugins/eng/skills/plan-repl/SKILL.md)                         | Research → plan → annotate → implement workflow for non-trivial tasks. Writes research and a plan to `tasks/{name}/`, iterates on the plan via inline `> NOTE:` blockquotes until approved, then implements. |
-| [`plan-repl-resume`](plugins/eng/skills/plan-repl-resume/SKILL.md)           | Resumes an in-progress `plan-repl` task by reading its persisted files and cross-referencing with branch state to infer the current phase, then hands off to the right `plan-repl` phase to continue.        |
 | [`pr-review-resolver`](plugins/eng/skills/pr-review-resolver/SKILL.md)       | Fetches unresolved GitHub PR review threads, submitted review bodies, and general comments, fixes each in code, commits, replies with the commit hash, and resolves the threads. `--auto` applies its proposed triage without stopping for confirmation.                             |
 | [`reorganize-branch-commits`](plugins/eng/skills/reorganize-branch-commits/SKILL.md) | Rewrites a non-default branch's history into clean, logical commits — proposes groupings from the actual diffs, gets approval, backs up, then rebuilds via `git reset` + re-commit (or `git rebase -i`) and checks nothing was lost.  |
 | [`righting-software-system-design`](plugins/eng/skills/righting-software-system-design/SKILL.md) | Heavyweight, opt-in, interview-driven system design session faithful to Juval Löwy's *Righting Software*. Walks framing → use cases → interrogative volatility analysis → iDesign component mapping (Manager/Engine/ResourceAccess/Utility) → call-chain validation, surfacing unknown-unknowns along the way and producing a written recommendation report. |
@@ -116,8 +114,7 @@ you phrase the request.
 
 | Skill                                                       | What it does                                                                                                                                                                                                 |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`de-slop`](plugins/comms/skills/de-slop/SKILL.md)  | Deep-strips AI tells (claudisms) from a draft while preserving its meaning and the writer's voice — the inverse of `dehumanizer`. Sweeps the draft against a bundled snapshot of the living [claudisms banlist](https://claudisms.ai/claudisms.md), catches the constructions a text search misses, then re-sweeps its own rewrites. For writing that ships under your name. |
-| [`dehumanizer`](plugins/comms/skills/dehumanizer/SKILL.md)  | Makes a message look AI-generated — the inverse of [the `humanizer`](https://github.com/blader/humanizer), a separate external skill. Injects LLM "tells" (em dashes, rule of three, copula avoidance, AI vocabulary, emoji bold headers) while preserving both the original meaning and its mood, on an intensity dial (`subtle` default, `heavy`, `unhinged`). Mostly for trolling. |
+| [`de-slop`](plugins/comms/skills/de-slop/SKILL.md)  | Deep-strips AI tells (claudisms) from a draft while preserving its meaning and the writer's voice. Sweeps the draft against a bundled snapshot of the living [claudisms banlist](https://claudisms.ai/claudisms.md), catches the constructions a text search misses, then re-sweeps its own rewrites. For writing that ships under your name. |
 
 ## `behavior` — agent behavior
 

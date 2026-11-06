@@ -2,11 +2,10 @@
 name: de-slop
 description: >-
   Deep-strip the tells of AI writing (claudisms) from a draft while keeping its
-  meaning and the writer's voice intact — the mirror image of the dehumanizer
-  skill, which adds them. Sweeps the draft against the living claudisms banlist
-  at claudisms.ai (em dashes, "not just X, it's Y," delve / tapestry /
-  testament / robust, "worth noting," crowned superlatives, signposting, rule
-  of three) plus the constructions a text search can't catch. Use this skill
+  meaning and the writer's voice intact. Sweeps the draft against the living
+  claudisms banlist at claudisms.ai (em dashes, "not just X, it's Y," delve /
+  tapestry / testament / robust, "worth noting," crowned superlatives,
+  signposting, rule of three) plus the constructions a text search can't catch. Use this skill
   whenever the user wants AI tells removed from writing — phrasings like
   "de-slop this," "strip the claudisms," "remove the AI tells," "humanize
   this," "scrub the AI out of this," "make this sound like I wrote it," "this

@@ -11,8 +11,8 @@ installable plugins, one per bucket. Claude Code consumes the repo as a
 consume the same tree through skills.sh (`npx skills@latest add esond/skills`)
 or the Codex plugin marketplace in `.agents/plugins/`.
 
-- `eng` — writing software: planning workflows, code review, git history,
-  .NET hygiene, system design, repo docs.
+- `eng` — writing software: code review, git history, .NET hygiene, system
+  design, repo docs.
 - `comms` — external communications and human-facing writing.
 - `behavior` — tweaks to the agent's behavior: output shaping.
 - `docs` — documentation: Diátaxis-guided writing and auditing of tutorials,
@@ -36,9 +36,9 @@ a root `plugin.json`, and an entry in both marketplace files
 starts at the version the other plugins are already on, not at `0.1.0`; CI
 rejects a plugin that disagrees.
 
-Skills that hand off to each other (`plan-repl` and `plan-repl-resume`,
-`sync-core-docs` and `sync-core-repo-docs`, the `diataxis` router and its four
-siblings) must stay in one plugin, and a skill that reads a sibling's
+Skills that hand off to each other (`sync-core-docs` and
+`sync-core-repo-docs`, the `diataxis` router and its four siblings) must stay
+in one plugin, and a skill that reads a sibling's
 `references/` file must live in the same plugin as that sibling.
 
 ## Manifest layout
