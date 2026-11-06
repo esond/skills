@@ -142,7 +142,7 @@ report it; post no replies.
 Watch CI:
 
 ```bash
-gh pr checks PR_NUMBER -R OWNER/REPO --watch
+gh pr checks PR_NUMBER -R OWNER/REPO --watch | tail -n 20
 ```
 
 If a check fails because of your commits, fix the root cause, commit, push,
@@ -171,6 +171,9 @@ sh <this skill's directory>/scripts/resolve-thread.sh THREAD_ID
 endpoint, with no hash, and leave the thread unresolved for the reviewer.
 
 **Review body or comment, Fix:** no reply; the commit message is the record.
+
+**Fix with no commit** (a PR description edit, say): make the change, reply
+saying what changed, and resolve the thread if it was one.
 
 **Review body or comment, Decline:** post one top-level comment per source:
 
@@ -201,6 +204,6 @@ reviewers you re-requested.
 
 ## Guardrails
 
-- Resolve a thread only when a pushed commit backs it.
+- Resolve a thread only when a pushed commit or a no-commit fix backs it.
 - Add new commits on top; the conflict rebase in Step 4 is the only history
   rewrite.
