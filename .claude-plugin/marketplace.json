@@ -12,32 +12,32 @@
     {
       "name": "eng",
       "source": "./plugins/eng",
-      "description": "Software engineering skills: planning workflows, code review, git history, .NET hygiene, system design, repo docs.",
-      "version": "0.35.0"
+      "description": "Software engineering skills: code review, git history, .NET hygiene, system design, repo docs.",
+      "version": "0.36.0"
     },
     {
       "name": "comms",
       "source": "./plugins/comms",
       "description": "Communication skills: transforms for messages and human-facing writing.",
-      "version": "0.35.0"
+      "version": "0.36.0"
     },
     {
       "name": "behavior",
       "source": "./plugins/behavior",
       "description": "Agent-behavior tweaks: output shaping.",
-      "version": "0.35.0"
+      "version": "0.36.0"
     },
     {
       "name": "docs",
       "source": "./plugins/docs",
       "description": "Documentation skills: Diátaxis-guided writing and auditing of tutorials, how-to guides, reference, and explanation.",
-      "version": "0.35.0"
+      "version": "0.36.0"
     },
     {
       "name": "esond",
       "source": "./plugins/esond",
       "description": "Personal skills: how Eric writes and works, rather than a general-purpose workflow.",
-      "version": "0.35.0"
+      "version": "0.36.0"
     }
   ]
 }
