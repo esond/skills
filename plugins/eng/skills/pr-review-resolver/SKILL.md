@@ -33,17 +33,19 @@ first" or "let me review" in the request also turns on `--ask`.
 
 ## Step 1: Identify the PR
 
-Take the PR from the arguments. With a URL, read `OWNER`, `REPO`, and
-`PR_NUMBER` from the URL itself, not from `gh repo view`. Otherwise detect it
-from the current branch:
+Take the PR from the arguments. Otherwise detect it from the current branch:
 
 ```bash
-gh pr view --json number
-gh repo view --json owner,name --jq '.owner.login + " " + .name'
+gh pr view --json url
 ```
 
-With no PR on the branch and none passed, ask the user for one, in either
-mode. Substitute the literal values into every later command.
+Read `OWNER`, `REPO`, and `PR_NUMBER` from the PR URL, not from
+`gh repo view`, which names the local repo and can be a fork. With no PR on
+the branch and none passed, ask the user for one, in either mode. Substitute
+the literal values into every later command.
+
+If the current branch is not the PR's head branch, run
+`gh pr checkout PR_NUMBER -R OWNER/REPO` before Step 4.
 
 ## Step 2: Fetch the feedback
 
@@ -135,8 +137,10 @@ For fixes to review bodies or general comments, name what was addressed in the
 commit message. Right after each commit, record `git rev-parse --short HEAD`
 against the items it covers.
 
-Push with `git push`, or `git push --force-with-lease` if you rebased in
-Step 4. If the push fails, stop and report it; post no replies.
+Push with `git push`, or `git push --force-with-lease --force-if-includes`
+if you rebased in Step 4; the second flag keeps a commit pushed from GitHub
+(an applied suggestion) from being overwritten. If the push fails, stop and
+report it; post no replies.
 
 Watch CI:
 
@@ -148,7 +152,9 @@ If a check fails because of your commits, fix the root cause, commit, push,
 and watch again, up to three rounds. Change a test's expected values only when
 the behavior it pins genuinely changed. If checks still fail after three
 rounds, stop and report before posting replies. Note failures your commits
-didn't cause for Step 7 and continue. A PR with no checks continues.
+didn't cause for Step 7 and continue. If `gh pr checks` reports no checks,
+wait about 30 seconds and retry, twice, before treating the PR as having none;
+checks take a moment to register after a push.
 
 ## Step 6: Reply, resolve, and re-request review
 
@@ -186,10 +192,13 @@ items you fixed or declined:
 gh api -X POST repos/OWNER/REPO/pulls/PR_NUMBER/requested_reviewers -f 'reviewers[]=LOGIN'
 ```
 
+If the call returns 422 (no repo access), note it for Step 7 and continue.
+
 ## Step 7: Summarize
 
-One line per item: its disposition, the commit hash for a Fix, and the URL of
-the reply (`html_url` in the reply's response). Flag any disposition changed
+One line per item: its disposition, the commit hash for a Fix, a one-sentence
+gist of any reply you posted, and the reply's URL (`html_url` in the
+response). Flag any disposition changed
 mid-run with the reason, CI failures your commits didn't cause, and the
 reviewers you re-requested.
 

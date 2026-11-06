@@ -16,7 +16,7 @@ repo=$2
 pr=$3
 
 echo "## threads"
-gh api graphql --paginate -F owner="$owner" -F repo="$repo" -F pr="$pr" -f query='
+gh api graphql --paginate -f owner="$owner" -f repo="$repo" -F pr="$pr" -f query='
 query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) {
   repository(owner: $owner, name: $repo) {
     pullRequest(number: $pr) {
