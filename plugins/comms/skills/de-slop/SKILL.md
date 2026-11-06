@@ -5,13 +5,13 @@ description: >-
   meaning and the writer's voice intact. Sweeps the draft against the living
   claudisms banlist at claudisms.ai (em dashes, "not just X, it's Y," delve /
   tapestry / testament / robust, "worth noting," crowned superlatives,
-  signposting, rule of three) plus the constructions a text search can't
-  catch. Use this skill whenever the user wants AI tells removed from writing — phrasings like
-  "de-slop this," "strip the claudisms," "remove the AI tells," "humanize
-  this," "scrub the AI out of this," "make this sound like I wrote it," "this
-  reads like ChatGPT wrote it," or "would this pass as human?" — even if they
-  never say "de-slop." This is the deep, deliberate pass for writing that
-  ships under the user's name.
+  signposting, rule of three) plus the constructions a text search can't catch.
+  Use this skill whenever the user wants AI tells removed from writing —
+  phrasings like "de-slop this," "strip the claudisms," "remove the AI tells,"
+  "humanize this," "scrub the AI out of this," "make this sound like I wrote
+  it," "this reads like ChatGPT wrote it," or "would this pass as human?" —
+  even if they never say "de-slop." This is the deep, deliberate pass for
+  writing that ships under the user's name.
 ---
 
 # De-slop: Strip the AI Tells from Writing
