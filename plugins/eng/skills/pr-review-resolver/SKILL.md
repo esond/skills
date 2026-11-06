@@ -28,10 +28,11 @@ first" or "let me review" in the request also turns on `--ask`.
 
 ## Step 1: Identify the PR
 
-Take the PR from the arguments. Otherwise detect it from the current branch:
+Get the PR's URL, passing the PR number if one was given; with no argument it
+comes from the current branch:
 
 ```bash
-gh pr view --json url
+gh pr view [PR_NUMBER] --json url
 ```
 
 Read `OWNER`, `REPO`, and `PR_NUMBER` from the PR URL, not from
@@ -117,7 +118,8 @@ Check whether the PR conflicts with its base:
 gh pr view PR_NUMBER -R OWNER/REPO --json mergeStateStatus,baseRefName
 ```
 
-If `mergeStateStatus` is `DIRTY`, run `git fetch origin`, rebase onto
+If it reads `UNKNOWN`, GitHub is still computing it; wait about 30 seconds and
+retry, twice. If it is `DIRTY`, run `git fetch origin`, rebase onto
 `origin/<baseRefName>`, and resolve the conflicts before editing.
 
 For a thread, start from its `path` and `line`. When `line` is null or
@@ -162,7 +164,7 @@ then resolve:
 
 ```bash
 gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments/COMMENT_ID/replies -f body="Fixed in abc1234"
-gh api graphql -f query='mutation { resolveReviewThread(input: {threadId: "THREAD_ID"}) { thread { isResolved } } }'
+sh <this skill's directory>/scripts/resolve-thread.sh THREAD_ID
 ```
 
 **Thread, Decline:** reply with the justification through the same replies
