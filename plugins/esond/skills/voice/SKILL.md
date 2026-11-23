@@ -3,16 +3,14 @@ name: voice
 description: >-
   Write anything that goes out under Eric's name, in his own voice: Slack
   messages and DMs, replies, email to colleagues or outside contacts, PR review
-  comments, issue and ticket comments, doc comments, posts. Load this whenever
-  the deliverable is text a person will read as written by him, whether he says
-  "draft a Slack message", "reply to this", "email the vendor", "how should I
-  word this", "tell the team", or pastes a thread and asks what to say back,
-  and when a message is one step of a larger task. Load it too when he gives
-  you a draft to tighten, sanity-check, or clean up: "make this sound like me",
-  "de-slop this", "strip the AI tells", "this reads like ChatGPT". Stays loaded
-  across revisions ("shorter", "try again"). An issue or ticket body goes to
-  work-item-voice; a comment on one stays here. Not for documents he authors:
-  PR descriptions, commit messages, files.
+  comments, issue and ticket comments, doc comments, posts. Load it whether he
+  says "draft a Slack message", "reply to this", "email the vendor", "how
+  should I word this", "tell the team", or pastes a thread and asks what to say
+  back, and when a message is one step of a larger task. Load it too when he
+  gives you a draft to tighten, sanity-check, or clean up: "make this sound
+  like me", "de-slop this", "strip the AI tells", "this reads like ChatGPT". An
+  issue or ticket body goes to work-item-voice; a comment on one stays here.
+  Not for documents he authors: PR descriptions, commit messages, files.
 ---
 
 # Voice
@@ -39,8 +37,7 @@ framing. Keep the facts.
 
 The test for what survives: the reader can act without replying to ask a
 question. If they need a date, a link, a reason, or the thing that changed,
-it goes in. Background they didn't ask for is framing; if they want it,
-they'll ask.
+it goes in. Background they didn't need to act comes out.
 
 ## The register
 
@@ -60,16 +57,12 @@ question gets a two-line answer.
 
 By the time a message gets written, the thinking is done and the decision is
 made. The message exists to transmit it. Prose that persuades, softens, or
-performs is noise, and it reads as someone selling rather than telling. So
-the failure mode is padding, not bluntness: warmth nobody asked for, and a
-closer that reaches for a feeling instead of the point.
+performs is padding, and it reads as someone selling rather than telling.
 
 ## Shape for the skim
 
-Most readers take in the first line or two and the last, then move on. A
-reply leads with the answer, the ask, or the news. Most Slack messages are
-one paragraph and stop there. A longer message ends on its last real point,
-never on a line that restates what it already said.
+Most readers take in the first line or two and the last, then move on. Most
+Slack messages are one paragraph and stop there.
 
 Several short questions get a few plain sentences that answer them in order.
 Bullets are for content the reader will scan or work through, like a set of
@@ -79,15 +72,13 @@ belong to documents, and emoji section markers belong nowhere.
 ## How he writes
 
 **Polish follows the setting.** A quick DM reply can start lowercase, drop
-the subject, skip the final period, and use shorthand (IMO, IIRC, atm, lol),
-or open on a reaction ("Hm. That's a new one.", "yeah you were"). A channel
-post, an email, or anything that explains over a few sentences gets normal
-capitals and punctuation. In a DM with someone he trusts, he says what he
+the subject ("got pulled into the incident"), skip the final period, and use
+shorthand (IMO, IIRC, atm, lol), or open on a reaction ("Hm. That's a new
+one.", "yeah you were"). A bare noun phrase still reads like a status field,
+so it's "that's by design", not "by design." A channel post, an email, or
+anything that explains over a few sentences gets full sentences, normal
+capitals, and punctuation. In a DM with someone he trusts, he says what he
 actually thinks, frustration included. Spelling is always clean.
-
-**Said out loud.** Write each sentence the way he'd say it: "that's by
-design", where a clipped "by design." reads like a status field. Plain words
-over metaphor or flourish, and "okay", never "OK".
 
 **Reasons inline.** The why goes in the same sentence, usually on "because"
 or "so": "Seems transient, because there's no egress quota anywhere in the
@@ -98,17 +89,19 @@ are true, say two. A list of three appears only when there are three.
 
 **Direct claims.** Say what something is: "the cache is cold most of the
 time." Disagreement goes in the first words, with no softening lead-in: "I
-don't think deploys should be the main metric." The message is about the subject, never about itself: no announcing
-how many items follow, how long they are, or what tone it's taking ("two
-quick things:", "each a line", "I want to ask it straight"). A list just
-starts.
+don't think deploys should be the main metric."
 
-**Content from the first word.** Open on the fact or the ask. An email or DM
-that starts a conversation gets "Hey Name," or "Hey there," on the same line
-as the first sentence, never a bare "Hi". Replies, channel posts, and issue,
-PR, and doc comments open on content. A message to several people names who
-it's for up front. Pleasantries, praise for the question, and apologies for
-following up all come out.
+**No metadiscourse.** The message is about the subject, never about itself:
+no announcing how many items follow, how long they are, or what tone it's
+taking ("two quick things:", "each a line", "I want to ask it straight"). A
+list just starts.
+
+**Content from the first word.** Open on the answer, the fact, or the ask. An
+email or DM that starts a conversation gets "Hey Name," or "Hey there," on
+the same line as the first sentence, never a bare "Hi". Replies, channel
+posts, and issue, PR, and doc comments open on content. A message to several
+people names who it's for up front. Pleasantries, praise for the question,
+and apologies for following up all come out.
 
 **Asks as questions.** When the message wants something, ask for it with a
 question pointed at the action: "Who can help me get access?", not "Do you
@@ -116,25 +109,29 @@ know who approves that?" A conditional like "if there's a doc, that'd answer
 most of it" leaves the reader to work out that it was an ask. In a review
 comment the change is shared work: "We should stream this", "Can we cap it?"
 
-**Only what was asked.** Commit to what the situation needs and nothing
-more: no "will push shortly" or "should be out by 3" unless the reader needs
-the time. When there's something to point at, the link is in the message.
+**Commitments only when asked.** A time or a follow-up goes in when the
+reader needs it. Otherwise "will push shortly" and "should be out by 3" stay
+out.
 
-**Everyday words.** The word a coworker says out loud: use, read, solid, ask,
-talk to, time, where a press release would say leverage, reach out, align
-on, bandwidth.
+**Everyday words.** Write each sentence the way he'd say it out loud, with
+the word a coworker would use: use, read, solid, ask, talk to, time, where a
+press release would say leverage, reach out, align on, bandwidth. Plain words
+over metaphor or flourish, and "okay", never "OK".
 
-**Ending on the point.** Stop after the ask or the last fact. A shoutout ends on what the person did.
-Exclamation points are rare; a "Thanks!" closing an email is about the only
-regular one. His name never goes at the bottom: Slack doesn't need it, and
-his email signature covers it. No em dashes, anywhere.
+**Ending on the point.** Stop after the ask or the last fact. A longer
+message ends on its last real point, never on a line that restates what it
+already said. A shoutout ends on what the person did. Exclamation points are
+rare; a "Thanks!" closing an email is about the only regular one. His name
+never goes at the bottom: Slack doesn't need it, and his email signature
+covers it. Asides go in commas or parentheses, never an em dash.
 
 ## Examples
 
 **Slack, a heads-up:**
 
-> Renaming `Order.status` to `state` Thursday morning. Breaking change for the
-> TS client, so regen after it lands. Nothing else on the DTO moves.
+> I'm renaming `Order.status` to `state` Thursday morning. It's a breaking
+> change for the TS client, so regen after it lands. Nothing else on the DTO
+> changes.
 
 Not: "Hey team! 👋 Just wanted to give everyone a heads up that we're making a
 change to the order schema."
@@ -186,7 +183,7 @@ fails, say so in one line and clean up using this file alone.
 ## Delivering the draft
 
 Lead with the text, in a code block or quote block so it copies cleanly into
-Slack or email. Don't explain the wording unless asked; after a cleanup, one
-line on what changed is enough. If a fact is genuinely missing (a date, an
+Slack or email. Nothing follows the block unless he asks, except one line on
+what changed after a cleanup. If a fact is genuinely missing (a date, an
 amount, a link, a name you cannot guess), ask for it. Don't invent it, and
 don't leave a bracket for someone to fill later, because brackets ship.
