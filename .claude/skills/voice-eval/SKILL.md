@@ -99,7 +99,11 @@ skill.
   apart from memorizer's Ollama on 11434): run
   `python SCRIPTS/ollama_arm.py <round_dir> <model> <prompt file> <arm>`.
   It sends one chat per scenario, with the prompt file as the system prompt.
-  The model must already be pulled.
+  If the container isn't running, create it with
+  `docker run -d --name writer-ollama --gpus=all -p 11435:11434 -v writer-ollama-data:/root/.ollama -e OLLAMA_CONTEXT_LENGTH=8192 ollama/ollama`,
+  then `docker exec writer-ollama ollama pull <model>`. Remove both
+  afterward with `docker rm -f writer-ollama` and
+  `docker volume rm writer-ollama-data`.
 
 ## Step 4: Assemble the round
 
