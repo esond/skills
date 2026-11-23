@@ -5,7 +5,7 @@ when working with code in this repository. `CLAUDE.md` is a symlink to it.
 
 ## What this repo is
 
-Eric's personal skills (`esond/skills`), published as five independently
+Eric's personal skills (`esond/skills`), published as four independently
 installable plugins, one per bucket. Claude Code consumes the repo as a
 **plugin marketplace** through `.claude-plugin/`; Codex and other agents
 consume the same tree through skills.sh (`npx skills@latest add esond/skills`)
@@ -13,7 +13,6 @@ or the Codex plugin marketplace in `.agents/plugins/`.
 
 - `eng` — writing software: code review, git history, .NET hygiene, system
   design, repo docs.
-- `comms` — external communications and human-facing writing.
 - `behavior` — tweaks to the agent's behavior: output shaping.
 - `docs` — documentation: Diátaxis-guided writing and auditing of tutorials,
   how-to guides, reference, and explanation.
@@ -27,7 +26,7 @@ JSON and skill markdown files directly.
 
 Every skill, output style, hook, or agent belongs to exactly one plugin. When
 adding one and the user hasn't said which plugin it goes in, suggest a bucket
-from the five above and confirm before proceeding. If it genuinely fits none of
+from the four above and confirm before proceeding. If it genuinely fits none of
 them, propose creating a new plugin bucket rather than forcing a bad fit — the
 whole point of the split is that buckets toggle independently per context. A
 new bucket needs a directory under `plugins/`, a `.claude-plugin/plugin.json`,
@@ -251,6 +250,13 @@ it needs `/clear` or a new session on top of the reload.
 
 If the skill doesn't fire, the `description` is usually the problem — not the
 body.
+
+The `voice` skill is a hypothesis about how Eric writes, tuned by blind
+scoring. `/voice-eval`, a project skill in `.claude/skills/voice-eval/` that
+exists only in this repo, generates messages from competing skill versions,
+serves a keyboard scorer, and turns the scores into proposed edits. Its data
+(rounds, scores, the claims ledger) lives in `~/.claude/voice-eval/`, outside
+the repo. Change `voice` through a round rather than by hand where you can.
 
 ## Conventions worth preserving
 

@@ -1,6 +1,6 @@
 {
   "name": "esond",
-  "version": "0.37.1",
+  "version": "0.38.0",
   "description": "Eric's personal skills: how he writes and works, rather than a general-purpose workflow.",
   "author": {
     "name": "Eric Sondergard",
@@ -8,7 +8,7 @@
   },
   "repository": "https://github.com/esond/skills",
   "skills": [
-    "./skills/conversational-voice",
+    "./skills/voice",
     "./skills/work-item-voice"
   ]
 }

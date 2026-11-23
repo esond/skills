@@ -16,7 +16,7 @@ skill instructs the agent to do, not runtime bugs.
    alphabetical row; the skill has an `agents/openai.yaml` whose `policy`
    agrees with its `disable-model-invocation` frontmatter; and `CLAUDE.md` is
    still a symlink to `AGENTS.md`. Also check the skill landed in the right
-   plugin bucket (`eng`/`comms`/`behavior`/`docs`/`esond` — AGENTS.md "Choosing
+   plugin bucket (`eng`/`behavior`/`docs`/`esond` — AGENTS.md "Choosing
    a bucket").
 2. **Description length.** Each SKILL.md `description` must stay under the
    ~1024-char upload-validation ceiling (see AGENTS.md "Authoring skills").

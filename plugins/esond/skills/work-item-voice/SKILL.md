@@ -23,15 +23,6 @@ reader pays for what the writer did not bother to cut, and every reader loses
 options the writer closed off by guessing at the solution. Those two costs are
 what this skill exists to keep down.
 
-Before you draft, read
-`../conversational-voice/references/writing-for-people.md`, the file
-`conversational-voice` owns. It holds the rules this skill shares with
-`conversational-voice`. What follows here is what is specific to an issue.
-
-If that read fails, draft anyway and say so in one line. The rules below still
-apply, but the shared ones are missing, and the user needs to know that before
-they file the issue.
-
 ## When this applies
 
 It applies when you are authoring the body of a work item: a feature, a task, or
@@ -40,7 +31,7 @@ that already exists — rewriting it, tightening it, or adding a single fact to
 it. Editing has its own section below.
 
 It does not apply to a *comment* on an issue. That is a turn in a conversation
-with a person, so it belongs to the sibling skill `conversational-voice`. The
+with a person, so it belongs to the sibling skill `voice`. The
 split is authored artifact versus conversational turn, not tool.
 
 ## The three kinds
@@ -140,8 +131,10 @@ is still not.
 
 ## The test for what survives
 
-The shared reference states the compression rule. Long issues are where it bites
-hardest, because one person writes the issue and every reader after them pays.
+The writer pays the compression cost: trim the framing, keep the facts. Cutting
+a fact a reader needs is not compression, it just moves the cost to every
+reader. Long issues are where this bites hardest, because one person writes the
+issue and every reader after them pays.
 The test for any sentence here: **does a developer need this fact to start?**
 
 Keep a date, an amount, a customer name, a concrete failing example, an
@@ -178,14 +171,12 @@ the issue wrong.
 
 ## Formatting
 
-Some of the writing habits in `conversational-voice` carry over: open on the
-content, list as many considerations as there are, and end where the content
-ends. For an issue, the answer that leads is the desired behavior or what
-happened, since the title already carries the summary. The recap line that
-`conversational-voice` gives long messages does not carry over, because an
-issue's last section is the background addendum when it has one.
+Some of the writing habits in `voice` carry over: open on the content, list as
+many considerations as there are, and end where the content ends. For an issue,
+the answer that leads is the desired behavior or what happened, since the title
+already carries the summary.
 
-The paragraph-first shape in `conversational-voice` does not carry over either.
+The paragraph-first shape in `voice` does not carry over.
 That one is calibrated for Slack, where most messages are one paragraph.
 A tracker is the opposite. People scan issues, come back to them weeks later,
 and read them next to twenty others.
@@ -299,7 +290,7 @@ of the issue. The next person to pick it up sees both statements and has no way
 to tell which one is current.
 
 Appending to a body is still an authored artifact. A comment on that same issue
-is a conversational turn, so it belongs to `conversational-voice`. That is the
+is a conversational turn, so it belongs to `voice`. That is the
 same split as above, and the tracker does not decide it.
 
 ### The tracker rewrites your markdown
@@ -317,8 +308,13 @@ match, read the body back from the tracker rather than trusting what you sent.
 
 ## Delivering the draft
 
-The shared reference says to lead with the artifact, in a block that copies
-cleanly. That assumes a person does the copying, which is not always true here.
+Lead with the artifact, in a block that copies cleanly, and keep any commentary
+short and after it. That assumes a person does the copying, which is not always
+true here.
+
+If a fact is genuinely missing (a date, an amount, a name you cannot guess),
+ask for it. Do not invent it, and do not leave a bracket for someone to fill
+later, because brackets ship.
 
 **When a person pastes it.** Lead with a title line, then the body in a fenced
 block. The fenced block is where the wrapping rule gets broken, because a wall
