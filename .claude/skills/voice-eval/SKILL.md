@@ -82,6 +82,31 @@ match real use:
 > no placeholders. Write a JSON array `[{"scenario": "<id>", "text": "..."}]`
 > to `<round_dir>/out-<arm>.json`, then reply only "done".
 
+When Eric asks for another model, add it as an arm run from this session, not a
+subagent. Label it `<model>+<skill arm label>` (`gpt-5.6-terra+voice@3fa2c1e`),
+or `<model>+<prompt file>@<sha>` when it gets a condensed prompt instead of the
+skill: a shortened system prompt for a small local model, with fewer rules
+plus sample messages. Keep that file in `~/.claude/voice-eval/`, not the repo,
+because its samples may be his real writing.
+
+- **Codex** (OpenAI, billed to his ChatGPT plan): pipe the prompt above, with
+  the skill text and `scenarios.json` inlined between `<skill>` and
+  `<scenarios>` tags, into
+  `codex exec -C <round_dir> --skip-git-repo-check --sandbox read-only --ephemeral -o <round_dir>/out-<arm>.json -`.
+  Tell it to use no tools and reply with only the JSON array. Inline
+  everything, because the Windows sandbox can't start a process to read
+  files. Read the model name from the `codex exec` banner. Codex loads
+  `~/.codex/AGENTS.md`, just as the Claude arms load CLAUDE.md.
+- **Local** (the `writer-ollama` Docker container on `localhost:11435`, kept
+  apart from memorizer's Ollama on 11434): run
+  `python SCRIPTS/ollama_arm.py <round_dir> <model> <prompt file> <arm>`.
+  It sends one chat per scenario, with the prompt file as the system prompt.
+  If the container isn't running, create it with
+  `docker run -d --name writer-ollama --gpus=all -p 11435:11434 -v writer-ollama-data:/root/.ollama -e OLLAMA_CONTEXT_LENGTH=8192 ollama/ollama`,
+  then `docker exec writer-ollama ollama pull <model>`. Remove both
+  afterward with `docker rm -f writer-ollama` and
+  `docker volume rm writer-ollama-data`.
+
 ## Step 4: Assemble the round
 
 Add these to the generated messages:
