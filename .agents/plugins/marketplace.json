@@ -16,17 +16,6 @@
       "category": "Engineering"
     },
     {
-      "name": "comms",
-      "source": {
-        "source": "local",
-        "path": "./plugins/comms"
-      },
-      "policy": {
-        "installation": "AVAILABLE"
-      },
-      "category": "Communication"
-    },
-    {
       "name": "behavior",
       "source": {
         "source": "local",

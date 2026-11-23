@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Voice scorer</title>
+<style>
+  :root { --bg:#f6f5f2; --card:#fff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e3e1dc; --accent:#2f5d8a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#17181a; --card:#202124; --ink:#ececec; --muted:#9a9aa0; --line:#34353a; --accent:#7fb0e0; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:32px 20px 60px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; color:var(--muted); font-size:13px; }
+  .bar { height:4px; background:var(--line); border-radius:2px; margin:8px 0 24px; overflow:hidden; }
+  .bar div { height:100%; background:var(--accent); width:0; transition:width .15s; }
+  .ctx { font-size:14px; color:var(--muted); margin-bottom:14px; }
+  .ctx b { color:var(--ink); font-weight:600; }
+  .chan { display:inline-block; padding:2px 8px; border:1px solid var(--line); border-radius:999px; font-size:12px; color:var(--ink); margin-right:8px; }
+  .reply { border-left:3px solid var(--line); padding:4px 12px; margin:10px 0 0; white-space:pre-wrap; }
+  .msg { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 20px; white-space:pre-wrap; font-size:17px; min-height:80px; }
+  .scale { display:flex; gap:8px; margin-top:22px; }
+  .scale button { flex:1; padding:12px 0; font:inherit; background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:8px; cursor:pointer; }
+  .scale button small { display:block; font-size:11px; color:var(--muted); }
+  .scale button.on { border-color:var(--accent); outline:2px solid var(--accent); }
+  .legend { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-top:6px; }
+  textarea { width:100%; margin-top:16px; font:inherit; font-size:14px; padding:8px; background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:8px; }
+  textarea:focus { outline:2px solid var(--accent); border-color:var(--accent); }
+  .keys { margin-top:28px; font-size:12px; color:var(--muted); }
+  kbd { border:1px solid var(--line); border-radius:4px; padding:0 5px; font-size:11px; }
+  .done { text-align:center; padding-top:80px; }
+  .done button { font:inherit; padding:10px 24px; border-radius:8px; border:1px solid var(--accent); background:var(--accent); color:#fff; cursor:pointer; }
+</style>
+</head>
+<body>
+<main id="app">Loading…</main>
+<script>
+let items = [], scores = {}, i = 0, roundName = "", noting = false;
+const app = document.getElementById("app");
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+async function load() {
+  const r = await (await fetch("/api/round")).json();
+  items = r.items; scores = r.scores; roundName = r.round;
+  const firstOpen = items.findIndex(it => scores[it.id]?.score == null);
+  i = firstOpen === -1 ? items.length : firstOpen;
+  render();
+}
+
+function save(id, patch) {
+  const cur = scores[id] || { score: null, note: "" };
+  scores[id] = { ...cur, ...patch };
+  fetch("/api/score", { method: "POST", body: JSON.stringify({ id, score: scores[id].score, note: scores[id].note }) });
+}
+
+function render() {
+  noting = false;
+  const done = items.filter(it => scores[it.id]?.score != null).length;
+  const head = `<header><span>${esc(roundName)}</span><span>${done} / ${items.length} scored</span></header>
+    <div class="bar"><div style="width:${100 * done / items.length}%"></div></div>`;
+  if (i >= items.length) {
+    const missing = items.length - done;
+    app.innerHTML = head + `<div class="done"><p>${missing ? missing + " item(s) unscored. <kbd>←</kbd> to go back." : "All scored."}</p>
+      <button id="fin">Finish round (Enter)</button></div>`;
+    document.getElementById("fin").onclick = finish;
+    return;
+  }
+  const it = items[i], c = it.context || {}, s = scores[it.id] || {};
+  app.innerHTML = head + `
+    <div class="ctx"><span class="chan">${esc(c.channel)}</span>to <b>${esc(c.to)}</b><div>${esc(c.situation)}</div>
+      ${c.replying_to ? `<div class="reply">${esc(c.replying_to)}</div>` : ""}</div>
+    <div class="msg">${esc(it.text)}</div>
+    <div class="scale">${[1,2,3,4,5].map(n => `<button data-n="${n}" class="${s.score === n ? "on" : ""}">${n}</button>`).join("")}</div>
+    <div class="legend"><span>nothing like me</span><span>very close to how I'd write it</span></div>
+    <textarea id="nt" rows="2" placeholder="Optional note (click or press n). Enter saves, Shift+Enter new line, Esc cancels">${esc(s.note)}</textarea>
+    <div class="keys"><kbd>1</kbd>–<kbd>5</kbd> score &amp; next · <kbd>←</kbd> <kbd>→</kbd> move · <kbd>n</kbd> note · <kbd>s</kbd> skip</div>`;
+  app.querySelectorAll(".scale button").forEach(b => b.onclick = () => score(+b.dataset.n));
+  const ta = document.getElementById("nt"), id = it.id;
+  ta.onfocus = () => { noting = true; };
+  ta.onblur = () => { noting = false; if (ta.value.trim() !== (scores[id]?.note || "")) save(id, { note: ta.value.trim() }); };
+  ta.onkeydown = e => {
+    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ta.blur(); }
+    else if (e.key === "Escape") { ta.value = scores[id]?.note || ""; ta.blur(); }
+    e.stopPropagation();
+  };
+}
+
+function score(n) { save(items[i].id, { score: n }); i++; render(); }
+
+function openNote() { document.getElementById("nt").focus(); }
+
+async function finish() {
+  await fetch("/api/done", { method: "POST" });
+  app.innerHTML = `<div class="done"><p>Round closed. Head back to Claude.</p></div>`;
+}
+
+document.addEventListener("keydown", e => {
+  if (noting || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (i >= items.length) {
+    if (e.key === "Enter") finish();
+    else if (e.key === "ArrowLeft") { i = items.length - 1; render(); }
+    return;
+  }
+  if (/^[1-5]$/.test(e.key)) score(+e.key);
+  else if (e.key === "ArrowRight" || e.key === "s") { i++; render(); }
+  else if (e.key === "ArrowLeft" && i > 0) { i--; render(); }
+  else if (e.key === "n") { e.preventDefault(); openNote(); }
+});
+
+load();
+</script>
+</body>
+</html>

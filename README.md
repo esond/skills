@@ -1,14 +1,13 @@
 # skills
 
 Eric's personal skills for [Claude Code](https://claude.ai/code), Codex, and
-other coding agents. They ship as five independently installable plugins —
-`eng`, `comms`, `behavior`, `docs`, and `esond` — so each bucket can be
+other coding agents. They ship as four independently installable plugins —
+`eng`, `behavior`, `docs`, and `esond` — so each bucket can be
 toggled on and off independently, per project or context.
 
 | Plugin                        | Bucket                                                                              |
 | ----------------------------- | ----------------------------------------------------------------------------------- |
 | [`eng`](plugins/eng)          | Writing software: review, git history, .NET hygiene, design, repo docs.             |
-| [`comms`](plugins/comms)      | External communications and human-facing writing.                                   |
 | [`behavior`](plugins/behavior) | Tweaks to the agent's behavior: output shaping.                                    |
 | [`docs`](plugins/docs)        | Documentation: Diátaxis-guided writing and auditing of docs.                        |
 | [`esond`](plugins/esond)      | Personal to Eric: how he writes and works, not a general-purpose workflow.          |
@@ -26,7 +25,6 @@ From a terminal:
 ```sh
 claude plugin marketplace add esond/skills
 claude plugin install eng@esond
-claude plugin install comms@esond
 claude plugin install behavior@esond
 claude plugin install docs@esond
 claude plugin install esond@esond
@@ -53,7 +51,6 @@ Or one bucket at a time:
 
 ```sh
 npx skills@latest add esond/skills/plugins/eng
-npx skills@latest add esond/skills/plugins/comms
 npx skills@latest add esond/skills/plugins/behavior
 npx skills@latest add esond/skills/plugins/docs
 npx skills@latest add esond/skills/plugins/esond
@@ -110,12 +107,6 @@ Each skill's `description` field enumerates the natural-language phrases that
 trigger it — you don't invoke them by name, the agent picks them up from how
 you phrase the request.
 
-## `comms` — communications
-
-| Skill                                                       | What it does                                                                                                                                                                                                 |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`de-slop`](plugins/comms/skills/de-slop/SKILL.md)  | Deep-strips AI tells (claudisms) from a draft while preserving its meaning and the writer's voice. Sweeps the draft against a bundled snapshot of the living [claudisms banlist](https://claudisms.ai/claudisms.md), catches the constructions a text search misses, then re-sweeps its own rewrites. For writing that ships under your name. |
-
 ## `behavior` — agent behavior
 
 ### Skills
@@ -158,15 +149,5 @@ only where output should sound like him.
 
 | Skill                                                                              | What it does                                                                                                                                                                                                 |
 | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| [`conversational-voice`](plugins/esond/skills/conversational-voice/SKILL.md)       | Writes Eric's side of a conversation with another person — Slack, DMs, email, PR and review comments — in his own voice. Direct and informal, in everyday words, with the answer up front for readers who skim. Applies to turns in an exchange, not to artifacts he authors like PR descriptions or commit messages. |
+| [`voice`](plugins/esond/skills/voice/SKILL.md)                                     | Writes anything that goes out under Eric's name — Slack, DMs, email, PR, issue, and doc comments — in his own voice: direct and informal, with polish matched to the setting. Also cleans up a draft he hands over, sweeping it against a bundled snapshot of the [claudisms banlist](https://claudisms.ai/claudisms.md). Tuned by blind scoring rounds (see AGENTS.md). |
 | [`work-item-voice`](plugins/esond/skills/work-item-voice/SKILL.md)                 | Writes issues in Eric's voice for any tracker — Jira, Linear, GitHub Issues — across the three kinds: features, tasks, and bugs. Never prescribes the implementation, so the developer keeps room to solve it. Features get behavior-driven framing (the "imagine it's 1922" test) with concrete domain detail; bugs get what happened / what was expected / how to see it. Language is written for non-native readers, and a sentence stays only if a developer needs it to start. Also covers editing an issue that already exists — inherit the voice, re-read the whole body after an append, and expect the tracker to rewrite your markdown. Drafts by default; filing a new issue is gated on confirmation, an edit at explicit request is not. |
-
-### Shared references
-
-Both voice skills read
-[`writing-for-people.md`](plugins/esond/skills/conversational-voice/references/writing-for-people.md)
-before they draft. `conversational-voice` owns the file and `work-item-voice`
-reads it by relative path. It holds the rules that are not specific to either
-one — the writer pays the compression cost, and how to hand the draft back.
-Any voice skill added later reads the same file rather than restating the
-rules.
