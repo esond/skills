@@ -11,7 +11,8 @@ description: >-
   you a draft to tighten, sanity-check, or clean up: "make this sound like me",
   "de-slop this", "strip the AI tells", "this reads like ChatGPT". Stays loaded
   across revisions ("shorter", "try again"). An issue or ticket body goes to
-  work-item-voice instead; a comment on one stays here.
+  work-item-voice; a comment on one stays here. Not for documents he authors:
+  PR descriptions, commit messages, files.
 ---
 
 # Voice

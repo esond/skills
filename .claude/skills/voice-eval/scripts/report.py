@@ -52,10 +52,9 @@ def report(name, items):
     print("## By arm")
     for arm, vals in sorted(group(items, lambda it: [it["arm"]]).items()):
         print(f"- {arm}: {stat(vals)}")
-    for arm in ("control", "anchor"):
-        vals = [it["score"] for it in scored if it["arm"] == arm]
-        if vals and mean(vals) < 4:
-            print(f"- WARNING: {arm} items average {mean(vals):.2f}, expected 4+; "
+    anchors = [it["score"] for it in scored if it["arm"] == "anchor"]
+    if anchors and mean(anchors) < 4:
+        print(f"- WARNING: anchor items average {mean(anchors):.2f}, expected 4+; "
                   "the scale has drifted or the context display is off.")
 
     print("\n## By arm and channel")

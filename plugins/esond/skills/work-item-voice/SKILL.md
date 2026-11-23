@@ -131,8 +131,10 @@ is still not.
 
 ## The test for what survives
 
-The shared reference states the compression rule. Long issues are where it bites
-hardest, because one person writes the issue and every reader after them pays.
+The writer pays the compression cost: trim the framing, keep the facts. Cutting
+a fact a reader needs is not compression, it just moves the cost to every
+reader. Long issues are where this bites hardest, because one person writes the
+issue and every reader after them pays.
 The test for any sentence here: **does a developer need this fact to start?**
 
 Keep a date, an amount, a customer name, a concrete failing example, an
@@ -306,8 +308,13 @@ match, read the body back from the tracker rather than trusting what you sent.
 
 ## Delivering the draft
 
-The shared reference says to lead with the artifact, in a block that copies
-cleanly. That assumes a person does the copying, which is not always true here.
+Lead with the artifact, in a block that copies cleanly, and keep any commentary
+short and after it. That assumes a person does the copying, which is not always
+true here.
+
+If a fact is genuinely missing (a date, an amount, a name you cannot guess),
+ask for it. Do not invent it, and do not leave a bracket for someone to fill
+later, because brackets ship.
 
 **When a person pastes it.** Lead with a title line, then the body in a fenced
 block. The fenced block is where the wrapping rule gets broken, because a wall

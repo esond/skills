@@ -10,9 +10,9 @@ metadata:
 # Voice eval
 
 Each round is a blind comparison. Several **arms** (versions of the voice
-skill, no skill at all, Eric's real messages) write or supply messages for the
-same scenarios. Eric scores each message with the arm hidden, and the scores
-decide what changes in the skill.
+skill, no skill at all) write messages for the same scenarios. Eric scores
+each message with the arm hidden, and the scores decide what changes in the
+skill.
 
 `SCRIPTS` is the `scripts/` folder beside this file. All data lives outside
 the repo, in `~/.claude/voice-eval/`. It holds real messages, so nothing under
@@ -67,9 +67,9 @@ By default there are three arms. `none` is a model with no voice skill. It
 still loads Eric's global CLAUDE.md, as real sessions do, so it measures what
 the skill adds on top of those rules. A small gap means the skill restates
 CLAUDE.md, not that it doesn't help.
-`production` is the skill in daily use, `conversational-voice` until `voice`
-replaces it. `candidate` is the working copy of
-`plugins/esond/skills/voice/SKILL.md`, once it exists. Label a skill arm
+`production` is the skill in daily use: `plugins/esond/skills/voice/SKILL.md`
+as committed on `main` (`git show main:<path>` into `arms/`). `candidate` is
+the working copy of the same file. Label a skill arm
 `<skill>@<first 7 of the SKILL.md sha1>`, and copy its SKILL.md into `arms/`.
 
 Spawn one subagent per arm, all in one turn, with `model: "opus"` so the arms

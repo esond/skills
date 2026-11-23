@@ -35,7 +35,7 @@
 <body>
 <main id="app">Loading…</main>
 <script>
-let items = [], scores = {}, i = 0, roundName = "", noting = false;
+let items = [], scores = {}, i = 0, roundName = "", noting = false, closed = false, pending = Promise.resolve();
 const app = document.getElementById("app");
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -50,7 +50,9 @@ async function load() {
 function save(id, patch) {
   const cur = scores[id] || { score: null, note: "" };
   scores[id] = { ...cur, ...patch };
-  fetch("/api/score", { method: "POST", body: JSON.stringify({ id, score: scores[id].score, note: scores[id].note }) });
+  const body = JSON.stringify({ id, score: scores[id].score, note: scores[id].note });
+  // Chain posts so the server appends them in the order they were made; last write wins on resume.
+  pending = pending.then(() => fetch("/api/score", { method: "POST", body })).catch(() => {});
 }
 
 function render() {
@@ -90,12 +92,15 @@ function score(n) { save(items[i].id, { score: n }); i++; render(); }
 function openNote() { document.getElementById("nt").focus(); }
 
 async function finish() {
+  if (closed) return;
+  closed = true;
+  await pending;
   await fetch("/api/done", { method: "POST" });
   app.innerHTML = `<div class="done"><p>Round closed. Head back to Claude.</p></div>`;
 }
 
 document.addEventListener("keydown", e => {
-  if (noting || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (closed || noting || e.ctrlKey || e.metaKey || e.altKey) return;
   if (i >= items.length) {
     if (e.key === "Enter") finish();
     else if (e.key === "ArrowLeft") { i = items.length - 1; render(); }
