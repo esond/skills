@@ -3,8 +3,9 @@
 usage: python ollama_arm.py <round_dir> <model> <prompt_file> <arm>
 
 Sends each scenario in <round_dir>/scenarios.json to the writer-ollama
-container on http://localhost:11435 as its own chat, with <prompt_file> as the system prompt, and writes
-<round_dir>/out-<arm>.json in the same shape the subagent arms write.
+container on http://localhost:11435 as its own chat, with <prompt_file> as
+the system prompt, and writes <round_dir>/out-<arm>.json in the same shape
+the subagent arms write.
 """
 
 import json

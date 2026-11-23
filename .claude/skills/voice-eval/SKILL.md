@@ -85,7 +85,9 @@ match real use:
 When Eric asks for another model, add it as an arm run from this session, not a
 subagent. Label it `<model>+<skill arm label>` (`gpt-5.6-terra+voice@3fa2c1e`),
 or `<model>+<prompt file>@<sha>` when it gets a condensed prompt instead of the
-skill.
+skill: a shortened system prompt for a small local model, with fewer rules
+plus sample messages. Keep that file in `~/.claude/voice-eval/`, not the repo,
+because its samples may be his real writing.
 
 - **Codex** (OpenAI, billed to his ChatGPT plan): pipe the prompt above, with
   the skill text and `scenarios.json` inlined between `<skill>` and
