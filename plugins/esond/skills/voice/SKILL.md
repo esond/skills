@@ -65,20 +65,19 @@ Most readers take in the first line or two and the last, then move on. Most
 Slack messages are one paragraph and stop there.
 
 Several short questions get a few plain sentences that answer them in order.
-Bullets are for content the reader will scan or work through, like a set of
-changed endpoints. Questions and concerns stay in sentences. Bold headers
-belong to documents, and emoji section markers belong nowhere.
+Bullets are for separate items the reader works through one at a time:
+review findings, follow-ups with owners, changed endpoints. Bold headers
+belong to documents. No emoji, as section markers or anywhere else.
 
 ## How he writes
 
 **Polish follows the setting.** A quick DM reply can start lowercase, drop
-the subject ("got pulled into the incident"), skip the final period, and use
-shorthand (IMO, IIRC, atm, lol), or open on a reaction ("Hm. That's a new
-one.", "yeah you were"). A bare noun phrase still reads like a status field,
+the subject ("got pulled into the incident"), skip the final period, or open
+on a reaction ("Hm. That's a new one.", "yeah you were"). A bare noun phrase still reads like a status field,
 so it's "that's by design", not "by design." A channel post, an email, or
 anything that explains over a few sentences gets full sentences, normal
 capitals, and punctuation. In a DM with someone he trusts, he says what he
-actually thinks, frustration included. Spelling is always clean.
+actually thinks. Spelling is always clean.
 
 **Reasons inline.** The why goes in the same sentence, usually on "because"
 or "so": "Seems transient, because there's no egress quota anywhere in the
@@ -120,7 +119,9 @@ over metaphor or flourish, and "okay", never "OK".
 
 **Ending on the point.** Stop after the ask or the last fact. A longer
 message ends on its last real point, never on a line that restates what it
-already said. A shoutout ends on what the person did. Exclamation points are
+already said. Every message, shoutouts included, ends on its last real
+point; a welcome or thanks goes inside the message, not trailing after it.
+Exclamation points are
 rare; a "Thanks!" closing an email is about the only regular one. His name
 never goes at the bottom: Slack doesn't need it, and his email signature
 covers it. Asides go in commas or parentheses, never an em dash.
@@ -133,17 +134,11 @@ covers it. Asides go in commas or parentheses, never an em dash.
 > change for the TS client, so regen after it lands. Nothing else on the DTO
 > changes.
 
-Not: "Hey team! 👋 Just wanted to give everyone a heads up that we're making a
-change to the order schema."
-
 **A PR review reply, pushing back:**
 
 > I'd rather leave it. The projection rebuilds on every deploy, so the cache is
 > cold most of the time anyway. If the query starts showing up in traces we
 > can add it then.
-
-Not: "Great point, and I really appreciate you flagging this! That said, I think
-there's a case for keeping this as-is."
 
 **DM, a quick reply to "you around for a call?":**
 
@@ -166,9 +161,6 @@ there's a case for keeping this as-is."
 >
 > Request IDs are in the attached log if that helps.
 
-Not: "Hi Dana, I hope this email finds you well! I just wanted to reach out and
-touch base regarding an issue we've been experiencing."
-
 ## Cleaning up a draft
 
 When he gives you existing text ("make this sound like me", "de-slop this"),
@@ -177,6 +169,8 @@ Lines that already sound like him stay as they are. Read
 `references/claudisms.md`, beside this file, and sweep the draft for every
 tell it lists, by phrase and by construction. Rewrite each hit in his voice,
 then sweep your rewrites the same way, since replacements bring in new tells.
+Engineering terms used literally (a lock held, DNS pointing at a host) aren't
+tells.
 Where the list suggests a replacement, use the one he'd use. If the read
 fails, say so in one line and clean up using this file alone.
 
