@@ -39,21 +39,28 @@ focus, that's the purpose.
 
 ## Step 2: Write scenarios
 
-Write 8 to 10 new scenarios to `scenarios.json`. Spread them across internal
+Write 6 to 8 new scenarios to `scenarios.json`. Spread them across internal
 Slack messages and DMs with colleagues, external messages to a vendor or
 partner, email, and technical writing (PR review comments, replies on a
-review, issue comments). Vary length and stakes, and vary the subject far
-beyond engineering ops: people and team stuff, kudos, saying no, scheduling,
-hiring, vendors and money, venting to a peer. Favor messages long enough
-that he'd ask Claude to draft them; he doesn't use it for one-liners. Check earlier rounds'
-`scenarios.json` and don't repeat a situation. Keep them generic, with no
-real employer, product, or person.
+review, issue comments). Vary stakes, and vary the subject far beyond
+engineering ops: people and team stuff, kudos, saying no, scheduling, hiring,
+vendors and money, venting to a peer. Check earlier rounds' `scenarios.json`
+and don't repeat a situation. Keep them generic, with no real employer,
+product, or person.
+
+Each message should land at 100 to 200 words, the length he'd actually ask
+Claude to draft; rounds a-d ran ~30 words and couldn't separate the arms.
+Pick situations that need that much (a multi-point update, a no with reasons,
+a review with several findings, a vendor email with a request and a deadline),
+and give the `ask` 8 to 10 distinct facts so a faithful message reaches that
+length; 5 or 6 facts came out near 75 words. Don't tell the generators a word count: how long each arm writes from
+the same facts is part of what's scored.
 
 ```json
-{"id": "s3", "context": {"channel": "Slack DM", "to": "a teammate you work with daily",
-  "situation": "They asked if the staging deploy went out; it failed on a migration you're fixing",
-  "replying_to": "did staging go out?"},
- "ask": "tell him no, migration blew up, fixing now, should be out by 3"}
+{"id": "s3", "context": {"channel": "Email", "to": "an account manager at a vendor, named Priya",
+  "situation": "Their invoice billed 40 seats; you have 25. You also want to drop the premium support add-on at renewal.",
+  "replying_to": null},
+ "ask": "invoice says 40 seats, we have 25 active, admin console screenshot attached. need a corrected invoice before the 15th or AP holds it. also dropping premium support at renewal in march, we filed 2 tickets all year. still want the SSO add-on. ask if there's an annual discount if we prepay"}
 ```
 
 `context` is what the scorer shows. `ask` is what Eric would type to Claude.
@@ -116,13 +123,15 @@ Add these to the generated messages:
   holds between sessions. If they average under 4, the scale has drifted or
   the context display is off, so look at that before trusting other
   differences. Rotate them so recent rounds don't repeat one. A rewrite Eric
-  typed into a note counts as a 5.
+  typed into a note counts as a 5. Prefer 5s at 100+ words; the pre-e rounds
+  have none, so short anchors stand in until long ones exist.
 - Every item is scored on one question: how close is this to how he'd write
   it? Rounds never mix in his real messages, so he isn't guessing what's
   AI-written.
 - **Probes** for 2 to 3 claims that are untested, open, or leaning: each
-  claim tested in at least two scenarios, each written 2 to 4 ways that
-  differ in exactly one trait, the trait the claim is about. Tag each with
+  claim tested in at least two scenarios, each written 2 ways that differ in
+  exactly one trait, the trait the claim is about. At this length, more
+  variants means rereading the same message. Tag each with
   the claim (`C8`) as well. A single score never settles a claim; the
   status rules are at the top of `claims.md`. They get arm `probe` and a tag
   `trait:value`, for example `caps:lowercase` vs `caps:sentence`.
@@ -131,14 +140,16 @@ Give generated items tags for traits you can see (`len:1-sentence`,
 `greeting:yes`) when they matter to the purpose. Shuffle everything, assign
 ids `<round>-01...`, and write `items.json`:
 `{"purpose": "...", "items": [{"id", "context", "text", "arm", "tags": []}]}`.
-Aim for 25 to 40 items.
+Aim for 20 to 28 items, roughly 4,000 words to read.
 
 ## Step 5: Score
 
 Run `python SCRIPTS/serve.py <round_dir>` in the background. It opens the
 browser. Tell Eric it's up: `1`-`5` scores and advances, `←`/`→` moves, `n`
 or a click focuses the note box, `s` skips. Every score saves as he goes, so he can stop and
-`/voice-eval resume` later. A note box sits under the scale. The server exits when he finishes the round, and
+`/voice-eval resume` later. A note box sits under the scale. Ask him to type
+a rewrite into the note on at least one long item; it counts as a 5 and
+becomes a long anchor. The server exits when he finishes the round, and
 that exit is your signal to continue.
 
 ## Step 6: Read the scores and propose edits
