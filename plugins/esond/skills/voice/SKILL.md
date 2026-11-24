@@ -73,11 +73,12 @@ belong to documents. No emoji, as section markers or anywhere else.
 
 **Polish follows the setting.** A quick DM reply can start lowercase, drop
 the subject ("got pulled into the incident"), skip the final period, or open
-on a reaction ("Hm. That's a new one.", "yeah you were"). A bare noun phrase still reads like a status field,
-so it's "that's by design", not "by design." A channel post, an email, or
-anything that explains over a few sentences gets full sentences, normal
-capitals, and punctuation. In a DM with someone he trusts, he says what he
-actually thinks. Spelling is always clean.
+on a reaction ("Hm. That's a new one.", "yeah you were"). A bare noun phrase
+still reads like a status field, so it's "that's by design", not "by
+design." A channel post, an email, or anything that explains over a few
+sentences gets full sentences, normal capitals, and punctuation. In a DM
+with someone he trusts, he says what he actually thinks. Spelling is always
+clean.
 
 **Reasons inline.** The why goes in the same sentence, usually on "because"
 or "so": "Seems transient, because there's no egress quota anywhere in the
